@@ -27,7 +27,7 @@ used.
 - `TimeZoneRules.h` - The rules defining how the zone offset varies for a single time-zone.
 - `ValueRange.h` - Date-time range values, used for data validation.
 - `DateTimeMath.h` - Contains date-time calculation functions.
-- `DateTimeZF.h` - Includes all includes and also formatter for printing and parsing strings to date-time structs
+- `DateTimeZF.h` - All includes in one and also formatter for printing and parsing strings to date-time structs
 
 ### Features
 
@@ -76,7 +76,7 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
 
 ### Code coverage
 
-<img src="https://github.com/ximtech/DateTimeZF/blob/main/example/test_coverage.png" alt="image" width="300"/>
+<img src="https://github.com/ximtech/DateTimeZF/blob/main/example/test_coverage.png" alt="image" width="400"/>
 
 ### Usage
 
