@@ -1,3 +1,4 @@
 .idea
 /Tests/cmake-build-debug/
 /cmake-build-debug/
+/cmake-build-debug-coverage/

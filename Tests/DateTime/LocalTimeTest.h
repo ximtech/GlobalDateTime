@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseTestTemplate.h"
-#include "Time.h"
+#include "LocalTime.h"
 
 static const int8_t INVALID_TIME_TEST_CASES[][3] = {
         {24, 0, 0},

@@ -1,6 +1,6 @@
-# DateTimeZF
+# GlobalDateTime
 
-[![tests](https://github.com/ximtech/DateTimeZF/actions/workflows/cmake-ci.yml/badge.svg)](https://github.com/ximtech/DateTimeZF/actions/workflows/cmake-ci.yml)
+[![tests](https://github.com/ximtech/GlobalDateTime/actions/workflows/cmake-ci.yml/badge.svg)](https://github.com/ximtech/GlobalDateTime/actions/workflows/cmake-ci.yml)
 
 Java package `java.time.*` partition to low-level C library. Fully refactored and memory optimization allow use in small
 embedded applications, designed for SMT32 microcontrollers. Written on ANSI C and no external dependencies has been
@@ -11,11 +11,11 @@ used.
 - `Instant.h` - Single instantaneous point on the time-line. This might be used to record event time-stamps in the
   application. The epoch-seconds are measured from the standard of 1970-01-01 00:00:00 where instants after the epoch
   have positive values, and earlier instants have negative values.
-- `Time.h` - A time without a time-zone in the ISO-8601 calendar system, such as 10:15:30. Represents a time, often
+- `LocalTime.h` - A time without a time-zone in the ISO-8601 calendar system, such as 10:15:30. Represents a time, often
   viewed as hour-minute-second. Time is represented to milliseconds precision.
-- `Date.h` - A date without a time-zone in the ISO-8601 calendar system, such as 2007-12-03. Represents a date, often
+- `LocalDate.h` - A date without a time-zone in the ISO-8601 calendar system, such as 2007-12-03. Represents a date, often
   viewed as year-month-day. Other date data, such as day-of-year, day-of-week and week-of-year, can also be calculated
-- `DateTime.h` - A date-time without a time-zone in the ISO-8601 calendar system, such as 2007-12-03T10:15:30.
+- `LocalDateTime.h` - A date-time without a time-zone in the ISO-8601 calendar system, such as 2007-12-03T10:15:30.
   Represents a date-time, often viewed as year-month-day-hour-minute-second. Other date and time data, such as
   day-of-year, day-of-week and week-of-year, can also be calculated
 - `ZonedDateTime.h` - A date-time with a time-zone in the ISO-8601 calendar system, such as 2007-12-03T10:15:30+01:00
@@ -27,7 +27,7 @@ used.
 - `TimeZoneRules.h` - The rules defining how the zone offset varies for a single time-zone.
 - `ValueRange.h` - Date-time range values, used for data validation.
 - `DateTimeMath.h` - Contains date-time calculation functions.
-- `DateTimeZF.h` - All includes in one and also formatter for printing and parsing strings to date-time structs
+- `GlobalDateTime.h` - All includes in one and also formatter for printing and parsing strings to date-time structs
 
 ### Features
 
@@ -57,8 +57,8 @@ How to add CPM to the project, check the [link](https://github.com/cpm-cmake/CPM
 
 ```cmake
 CPMAddPackage(
-        NAME DateTimeZF
-        GITHUB_REPOSITORY ximtech/DateTimeZF
+        NAME GlobalDateTime
+        GITHUB_REPOSITORY ximtech/GlobalDateTime
         GIT_TAG origin/main
         OPTIONS
         "ENABLE_TIME_ZONE_SUPPORT ON"
@@ -71,23 +71,23 @@ target_link_libraries(${PROJECT_NAME} DateTimeZF)
 ```cmake
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
 # For Clion STM32 plugin generated Cmake use 
-target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
+target_link_libraries(${PROJECT_NAME}.elf GlobalDateTime)
 ```
 
 ### Code coverage
 
-<img src="https://github.com/ximtech/DateTimeZF/blob/main/example/test_coverage.png" alt="image" width="400"/>
+<img src="https://github.com/ximtech/DateTimeZF/blob/main/example/test_coverage.png" alt="image"/>
 
-### Usage
+## Usage
 
-#### Single include for full features 
+### Single include for full features 
 **Note**: see package description if only particular implementations needed 
 
 ```c
-  #include "DateTimeZF"
+  #include "GlobalDateTime.h"
 ```
 
-##### Get current date and time
+### Get current date and time
 
 **Note**: those function implementation should be at particular driver (RTC, Tick, Internet time) side.
 
@@ -98,13 +98,13 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   DateTime dateTime = dateTimeNow();
 ```
 
-##### Get current date at UTC
+### Get current date at UTC
 
 ```c
   ZonedDateTime zDateTime = zonedDateTimeNow(&UTC); // zoned date-time creation with time zone alignment and predefined UTC zone
 ```
 
-##### Create instant from epoch seconds
+### Create instant from epoch seconds
 
 ```c
   Instant instant = instantOfEpochSeconds(1654540212); // Epoch time in seconds. GMT: Monday, 6 June 2022 year, 18:30:12
@@ -112,7 +112,7 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   Instant instant = instantOfEpochMillis(1654559925246); // Epoch time in millis. UTC: Mon Jun 06 2022 23:58:45
 ```
 
-##### Create a time (hour, minute, second, millis)
+### Create a time (hour, minute, second, millis)
 
 ```c
   Time time = timeOf(13, 22, 45); // hours, minutes, seconds
@@ -120,14 +120,14 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   Time time = timeOfHourAndMinutes(13, 22); // hours, minutes
 ```
 
-##### Create a time from Instant
+### Create a time from Instant
 
 ```c
   Instant instant = instantOfEpochSeconds(1654540212); // GMT: Monday, 6 June 2022 year, 18:30:12
   Time time = timeOfInstant(&instant, &UTC);     // 18:30:12
 ```
 
-##### Create a time from seconds, millis and micros of day
+### Create a time from seconds, millis and micros of day
 
 ```c
   Time time = timeOfSecondOfDay(86300);  // 23:58:20
@@ -135,28 +135,28 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   Time time = timeOfMicrosOfDay(86300 * 1000000LL);  // 23:58:20
 ```
 
-##### Create a date (year, month, day)
+### Create a date (year, month, day)
 
 ```c
   Date date = dateOf(2014, 7, 23);
   Date date = dateOf(2014, JULY, 23);  // with predefined month
 ```
 
-##### Create a date additional functions
+### Create a date additional functions
 
 ```c
   Date date = dateOfEpochDay(3567); // 1979.10.08 Monday. Days count from 1970-01-01
   Date date = dateOfYearDay(2014, 187);  // 2014.07.06 Sunday. Days of year from 1 to 366
 ```
 
-##### Create a date from Instant
+### Create a date from Instant
 
 ```c
   Instant instant = instantOfEpochSeconds(1654540212); // GMT: Monday, 6 June 2022 year, 18:30:12
   Date date = dateOfInstant(&instant, &UTC); // 2022.06.06 Monday
 ```
 
-##### Create a date-time (year, month, day, hour, minute, second, millisecond)
+### Create a date-time (year, month, day, hour, minute, second, millisecond)
 
 ```c
   DateTime dateTime = dateTimeOf(2008, JUNE, 23, 14, 6);
@@ -164,7 +164,7 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   DateTime dateTime = dateTimeOfWithMillis(2008, JUNE, 23, 14, 6, 45, 436);
 ```
 
-##### Create a date-time from Date and Time
+### Create a date-time from Date and Time
 
 ```c
   Date date = dateOf(2008, JUNE, 23);
@@ -172,27 +172,27 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   DateTime dateTime = dateTimeFrom(&date, &time); // 2008.06.23 Monday 14:06:45
 ```
 
-##### Create a date-time from Instant
+### Create a date-time from Instant
 
 ```c
   Instant instant = instantOfEpochSeconds(1654540212); // GMT: Monday, 6 June 2022 year, 18:30:12
   DateTime dateTime = dateTimeOfInstant(&instant, &UTC); // 2022.06.06 Monday 18:30:12
 ```
 
-##### Create a date-time from epoch seconds, micro adjustment and time zone offset
+### Create a date-time from epoch seconds, micro adjustment and time zone offset
 
 ```c
   DateTime dateTime = dateTimeOfEpochSeconds(1654540212, 1000000, UTC.utcOffset); // 2022.06.06 Monday 18:30:13
 ```
 
-##### Create a date-time at midnight
+### Create a date-time at midnight
 
 ```c
   Date date = dateOf(2008, JUNE, 23);
   DateTime dateTime = dateTimeAtStartOfDay(&date);   // 2008.06.23 Monday 00:00:00
 ```
 
-##### Create time zone
+### Create time zone
 
 ```c
   TimeZone zone1 = timeZoneOf("Z");
@@ -211,14 +211,14 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   TimeZone customZone = { "Custom_Zone", 28800/*in seconds*/, UTC_ZONE_NAMES, NULL };    // zone with UTC names, offset of 8 hours and no DST rules
 ```
 
-##### Create a zoned date-time
+### Create a zoned date-time
 
 ```c
   TimeZone zone = timeZoneOf("Europe/Paris");
   ZonedDateTime zonedDateTime = zonedDateTimeOf(2014, AUGUST, 23, 16, 3, 56, 456, &zone);  // 2014.08.23 Saturday 16:03:56:456
 ```
 
-##### Create a zoned date-time from Date and Time
+### Create a zoned date-time from Date and Time
 
 ```c
   Date date = dateOf(2008, JUNE, 23);
@@ -227,14 +227,14 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   ZonedDateTime zonedDateTime = zonedDateTimeFrom(&date, &time, &zone);
 ```
 
-##### Create a zoned date-time from DateTime
+### Create a zoned date-time from DateTime
 
 ```c
   DateTime dateTime = dateTimeOf(2008, JUNE, 23, 14, 6);
   ZonedDateTime zonedDateTime = zonedDateTimeOfDateTime(&dateTime, &UTC);
 ```
 
-##### Create a zoned date-time from Instant
+### Create a zoned date-time from Instant
 
 ```c
   TimeZone zone2 = timeZoneOf("+03:00");
@@ -242,7 +242,7 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   ZonedDateTime zonedDateTime = zonedDateTimeOfInstant(&instant, &zone2); // 2022.06.06 Monday 18:30:12
 ```
 
-##### Create a zoned date-time from other zoned date-time (date and time adjustment according zone offset and DST rules)
+### Create a zoned date-time from other zoned date-time (date and time adjustment according zone offset and DST rules)
 
 ```c
   TimeZone zoneParis = timeZoneOf("Europe/Paris");
@@ -251,7 +251,7 @@ target_link_libraries(${PROJECT_NAME}.elf DateTimeZF)
   ZonedDateTime gmtDateTime = zonedDateTimeWithSameInstant(&zonedDateTime4, &zoneGmt);          // GMT-14: 2014.08.23 Saturday 00:03:56:456
 ```
 
-##### Instant manipulations
+### Instant manipulations
 Check header files for full function description
 ```c
   Instant first = instantOfEpochSeconds(1654540212);   // GMT: Monday, 6 June 2022 year, 18:30:12
@@ -268,7 +268,7 @@ Check header files for full function description
   printf("Is first equals second: %s\n", isInstantEquals(&first, &second) ? "Yes" : "No"); // No
 ```
 
-##### Date-time manipulations
+### Date-time manipulations
 **Note**: Time, Date and ZonedDateTime have same functionality
 ```c
   DateTime first = dateTimeOf(2007, FEBRUARY, 28, 12, 23);   // Non leap year
@@ -289,7 +289,7 @@ Check header files for full function description
   printf("Is second before first: %s\n", isDateTimeBefore(&second, &first) ? "Yes" : "No"); // Yes
   printf("Is first equals second: %s\n", isDateTimeEquals(&first, &second) ? "Yes" : "No"); // No
 ```
-##### Formatting date-time and parsing string(Date, Time, DateTime, ZonedDateTime, TimeZone)
+### Formatting date-time and parsing string(Date, Time, DateTime, ZonedDateTime, TimeZone)
 See below all available parser and format types
 ```c
   char buffer[64] = {0};
@@ -320,7 +320,7 @@ See below all available parser and format types
   }
 ```
 
-##### Zoned date-time feature (DST rules support)
+### Zoned date-time feature (DST rules support)
 - [Daylight Saving Time (DST)](https://en.wikipedia.org/wiki/Daylight_saving_time)
 - Paris, normally UTC+1, has DST (add one hour = UTC+2) from 27/Mar to 30/Oct 2016. Review the above output, and the API can calculate and handle the DST correctly.
 

@@ -1,10 +1,10 @@
-#include "DateTime/TimeTest.h"
-#include "DateTime/DateTest.h"
+#include "DateTime/LocalTimeTest.h"
+#include "DateTime/LocalDateTest.h"
 #include "DateTime/IntantTest.h"
-#include "DateTime/DateTimeTest.h"
+#include "DateTime/LocalDateTimeTest.h"
 #include "DateTime/ZonedDateTimeTest.h"
 #include "DateTime/TimeZoneTest.h"
-#include "DateTime/DateTimeZFTest.h"
+#include "DateTime/GlobalDateTimeTest.h"
 
 int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)]) {
     MunitTest emptyTests[] = {END_OF_TESTS};

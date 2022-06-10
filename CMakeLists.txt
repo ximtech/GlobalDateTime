@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(DateTimeZF VERSION 1.0 LANGUAGES C)
+project(GlobalDateTime VERSION 1.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 
@@ -7,11 +7,11 @@ set(ENABLE_TIME_ZONE_SUPPORT OFF)
 set(ENABLE_TIME_ZONE_HISTORY_SUPPORT OFF)
 
 set(SOURCE_FILES
-        Date.c
-        DateTime.c
-        DateTimeZF.c
+        LocalDate.c
+        LocalDateTime.c
+        GlobalDateTime.c
         Instant.c
-        Time.c
+        LocalTime.c
         TimeZone.c
         ZonedDateTime.c
         include/DateTimeMath.h
@@ -20,11 +20,11 @@ set(SOURCE_FILES
         include/TimeZoneRules.h
         include/ValueRange.h
         include/Instant.h
-        include/Date.h
-        include/Time.h
-        include/DateTime.h
+        include/LocalDate.h
+        include/LocalTime.h
+        include/LocalDateTime.h
         include/ZonedDateTime.h
-        include/DateTimeZF.h)
+        include/GlobalDateTime.h)
 
 # Establish the project options
 option(ENABLE_TIME_ZONE_SUPPORT "Set to ON to enable time zone list" ${ENABLE_TIME_ZONE_SUPPORT})

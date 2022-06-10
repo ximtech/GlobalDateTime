@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseTestTemplate.h"
-#include "DateTime.h"
+#include "LocalDateTime.h"
 
 static const TimeZone ZONE_PARIS = {.id = "Europe/Paris", .utcOffset = 7200};
 static const TimeZone ZONE_MINUS_TWO_HOURS = {.id = "GMT-2", .utcOffset = -7200};

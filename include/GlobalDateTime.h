@@ -70,11 +70,3 @@ void formatTime(Time *time, char *resultBuffer, uint32_t length, DateTimeFormatt
 void formatDate(Date *date, char *resultBuffer, uint32_t length, DateTimeFormatter *formatter);
 void formatDateTime(DateTime *dateTime, char *resultBuffer, uint32_t length, DateTimeFormatter *formatter);
 void formatZonedDateTime(ZonedDateTime *zonedDateTime, char *resultBuffer, uint32_t length, DateTimeFormatter *formatter);
-
-
-
-
-
-
-
-

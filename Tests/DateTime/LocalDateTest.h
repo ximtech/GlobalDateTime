@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseTestTemplate.h"
-#include "Date.h"
+#include "LocalDate.h"
 
 
 static Date TEST_2007_07_15 = {.year = 2007, .month = 7, .day = 15, .weekDay = SUNDAY};

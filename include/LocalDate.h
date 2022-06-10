@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Time.h"
+#include "LocalTime.h"
 
 /*The number of days in a 400 year cycle.*/
 #define DAYS_PER_CYCLE 146097L

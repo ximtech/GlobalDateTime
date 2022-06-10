@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseTestTemplate.h"
-#include "DateTimeZF.h"
+#include "GlobalDateTime.h"
 
 typedef struct PatternCompileTest {
     const char *pattern;
