@@ -461,7 +461,7 @@ static MunitTest dateTimeFormatterTests[] = {
 };
 
 static const MunitSuite dateTimeFormatterTestSuite = {
-        .prefix = "DateTimeZF: ",
+        .prefix = "GlobalDateTime: ",
         .tests = dateTimeFormatterTests,
         .suites = NULL,
         .iterations = 1,
