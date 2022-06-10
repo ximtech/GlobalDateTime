@@ -35,7 +35,7 @@ used.
 - No dynamic or static memory allocations
 - All time zone support
 - Rich functionality for creating time zones
-- Daylight saving with historic rules support
+- Daylight savings with historic rules support
 - Epoch date/time functions
 - String to date-time and vice versa
 - Flexible string parsing to date-time
@@ -65,7 +65,7 @@ CPMAddPackage(
         "ENABLE_TIME_ZONE_HISTORIC_RULES OFF"
 )
 
-target_link_libraries(${PROJECT_NAME} DateTimeZF)
+target_link_libraries(${PROJECT_NAME} GlobalDateTime)
 ```
 
 ```cmake
@@ -130,9 +130,9 @@ target_link_libraries(${PROJECT_NAME}.elf GlobalDateTime)
 ### Create a time from seconds, millis and micros of day
 
 ```c
-  Time time = timeOfSecondOfDay(86300);  // 23:58:20
-  Time time = timeOfMillisOfDay(86300 * 1000);  // 23:58:20
-  Time time = timeOfMicrosOfDay(86300 * 1000000LL);  // 23:58:20
+  Time time = timeOfSecondOfDay(86300);  // 23:58:20:000
+  Time time = timeOfMillisOfDay(86300 * 1000);  // 23:58:20:001
+  Time time = timeOfMicrosOfDay(86300 * 1000000LL);  // 23:58:20:001
 ```
 
 ### Create a date (year, month, day)
@@ -142,7 +142,7 @@ target_link_libraries(${PROJECT_NAME}.elf GlobalDateTime)
   Date date = dateOf(2014, JULY, 23);  // with predefined month
 ```
 
-### Create a date additional functions
+### Create a date (additional functions)
 
 ```c
   Date date = dateOfEpochDay(3567); // 1979.10.08 Monday. Days count from 1970-01-01
