@@ -80,7 +80,7 @@ target_link_libraries(${PROJECT_NAME}.elf GlobalDateTime)
 
 ## Usage
 
-### Single include for full features 
+### Single include for all features 
 **Note**: see package description if only particular implementations needed 
 
 ```c
