@@ -618,7 +618,7 @@ See below all available parser and format types
     <td>0002, 0020, 0201, 2017</td>
   </tr>
   <tr>
-    <td>yyyy</td>
+    <td>yyyyy</td>
     <td>00002, 00020, 00201, 02017, 23017</td>
   </tr>
   <tr>
