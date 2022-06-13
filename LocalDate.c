@@ -15,7 +15,7 @@ Date dateOf(int64_t year, Month month, uint8_t dayOfMonth) {
 }
 
 Date dateOfEpochDay(int64_t epochDay) {
-    if (isValidValue(EPOCH_DAY_RANGE, epochDay)) {
+    if (isValidValue(&EPOCH_DAY_RANGE, epochDay)) {
         int64_t zeroDay = epochDay + DAYS_0000_TO_1970;
         // find the march-based year
         zeroDay -= 60;  // adjust to 0000-03-01 so leap day is at end of four year cycle
@@ -41,7 +41,7 @@ Date dateOfEpochDay(int64_t epochDay) {
         uint32_t dayOfMonth = marchDoy0 - (marchMonth0 * 306 + 5) / 10 + 1;
         yearEst += marchMonth0 / 10;
 
-        if (isValidValue(YEAR_RANGE, yearEst)) {
+        if (isValidValue(&YEAR_RANGE, yearEst)) {
             return dateOf(yearEst, month, dayOfMonth);
         }
     }
@@ -49,12 +49,12 @@ Date dateOfEpochDay(int64_t epochDay) {
 }
 
 Date dateOfYearDay(uint32_t year, uint32_t dayOfYear) {
-    if (isValidValue(YEAR_RANGE, year) && isValidValue(DAY_OF_YEAR_RANGE, dayOfYear)) {
+    if (isValidValue(&YEAR_RANGE, year) && isValidValue(&DAY_OF_YEAR_RANGE, dayOfYear)) {
         bool leap = isLeapYear(year);
         if (dayOfYear == DAY_OF_YEAR_RANGE.max && !leap) return UNINITIALIZED_DATE; // Invalid date 366 as this year is not a leap year
 
         Month month = (dayOfYear - 1) / 31 + 1;
-        if (!isValidValue(MONTH_OF_YEAR_RANGE, month)) return UNINITIALIZED_DATE; // Invalid value for Month
+        if (!isValidValue(&MONTH_OF_YEAR_RANGE, month)) return UNINITIALIZED_DATE; // Invalid value for Month
         uint32_t monthEnd = firstDayOfYearByMonth(month, leap) + lengthOfMonth(month, leap) - 1;
         if (dayOfYear > monthEnd) {
             month = monthPlus(month, 1);
@@ -106,7 +106,7 @@ int64_t dateToEpochSeconds(Date *date, Time *time, const TimeZone *zone) {
 }
 
 void datePlusYears(Date *date, int64_t yearsToAdd) {
-    if (yearsToAdd != 0 && isDateValid(date) && isValidValue(YEAR_RANGE, date->year + yearsToAdd)) {
+    if (yearsToAdd != 0 && isDateValid(date) && isValidValue(&YEAR_RANGE, date->year + yearsToAdd)) {
         resolvePreviousValidDate(date, date->year + yearsToAdd, date->month, date->day);
     }
 }
@@ -116,7 +116,7 @@ void datePlusMonths(Date *date, int64_t monthsToAdd) {
     int64_t monthCount = date->year * 12 + (date->month - 1);
     int64_t calcMonths = monthCount + monthsToAdd;
     int64_t newYear = floorDiv(calcMonths, 12);
-    if (isValidValue(YEAR_RANGE, newYear)) {
+    if (isValidValue(&YEAR_RANGE, newYear)) {
         int64_t newMonth = floorMod(calcMonths, 12) + 1;
         resolvePreviousValidDate(date, newYear, newMonth, date->day);
     }
@@ -141,7 +141,7 @@ void datePlusDays(Date *date, int64_t daysToAdd) {
             } else if (date->month < 12) {
                 return setDate(date, date->year, date->month + 1, totalDays - monthLength);
             } else {
-                if (isValidValue(YEAR_RANGE, date->year + 1)) {
+                if (isValidValue(&YEAR_RANGE, date->year + 1)) {
                     setDate(date, date->year + 1, 1, (totalDays - monthLength));
                     return;
                 }
@@ -298,7 +298,7 @@ static void setDate(Date *date, int64_t year, Month month, uint8_t dayOfMonth) {
 }
 
 static bool isProvidedDateValid(int64_t year, Month month, uint8_t dayOfMonth) {
-    if (isValidValue(YEAR_RANGE, year) && isValidValue(MONTH_OF_YEAR_RANGE, month) && isValidValue(DAY_OF_MONTH_RANGE, dayOfMonth)) {
+    if (isValidValue(&YEAR_RANGE, year) && isValidValue(&MONTH_OF_YEAR_RANGE, month) && isValidValue(&DAY_OF_MONTH_RANGE, dayOfMonth)) {
         if (dayOfMonth > 28) {
             uint8_t dom = 31;
             switch (month) {

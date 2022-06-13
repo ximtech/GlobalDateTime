@@ -39,7 +39,7 @@ DateTime dateTimeOfInstant(Instant *instant, const TimeZone *zone) {
 
 DateTime dateTimeOfEpochSeconds(int64_t epochSeconds, int64_t microsOfSecond, int32_t zoneSecondsOffset) {
     DateTime dateTime = UNINITIALIZED_DATE_TIME;
-    if (isValidValue(MICROS_OF_SECOND_RANGE, microsOfSecond)) {
+    if (isValidValue(&MICROS_OF_SECOND_RANGE, microsOfSecond)) {
         int64_t localSeconds = epochSeconds + zoneSecondsOffset;
         int64_t localEpochDay = floorDiv(localSeconds, SECONDS_PER_DAY);
         int64_t secondsOfDay = floorMod(localSeconds, SECONDS_PER_DAY);

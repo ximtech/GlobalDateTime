@@ -461,7 +461,7 @@ static uint8_t parseYear(TemporalField *temporal, Date *date, const char *text) 
     if (date == NULL) return TEXT_NOT_PARSED;
     uint8_t parsedLength = 0;
     int64_t year = extractTemporalNumber(temporal, text, &parsedLength);
-    if (isValidValue(YEAR_RANGE, year)) {
+    if (isValidValue(&YEAR_RANGE, year)) {
         date->year = year;
         return parsedLength;
     }
@@ -489,7 +489,7 @@ static uint8_t parseMonth(TemporalField *temporal, Date *date, const char *text)
     if (temporal->length == PATTERN_LENGTH_ONE || temporal->length == PATTERN_LENGTH_TWO) {    // Parse numeric value
         strncpy(monthBuffer, text, parsedLength);
         Month month = extractTemporalNumber(temporal, text, &parsedLength);
-        if (isValidValue(MONTH_OF_YEAR_RANGE, month)) {
+        if (isValidValue(&MONTH_OF_YEAR_RANGE, month)) {
             date->month = month;
             return parsedLength;
         }
@@ -522,7 +522,7 @@ static uint8_t parseDayInMonth(TemporalField *temporal, Date *date, const char *
     if (date == NULL) return TEXT_NOT_PARSED;
     uint8_t parsedLength = 0;
     int64_t day = extractTemporalNumber(temporal, text, &parsedLength);
-    if (isValidValue(DAY_OF_MONTH_RANGE, day)) {
+    if (isValidValue(&DAY_OF_MONTH_RANGE, day)) {
         date->day = (int8_t) day;
         return parsedLength;
     }
@@ -585,7 +585,7 @@ static uint8_t parseHourOfDay(TemporalField *temporal, Time *time, const char *t
     if (time == NULL) return TEXT_NOT_PARSED;
     uint8_t parsedLength = 0;
     int64_t hours = extractTemporalNumber(temporal, text, &parsedLength);
-    if (isValidValue(HOUR_OF_DAY_RANGE, hours)) {
+    if (isValidValue(&HOUR_OF_DAY_RANGE, hours)) {
         time->hours = (int8_t) hours;
         return parsedLength;
     }
@@ -596,7 +596,7 @@ static uint8_t parseHourOfAmPm(TemporalField *temporal, Time *time, const char *
     if (time == NULL) return TEXT_NOT_PARSED;
     uint8_t parsedLength = 0;
     int64_t hours = extractTemporalNumber(temporal, text, &parsedLength);
-    if (isValidValue(HOUR_OF_AM_PM, hours)) {
+    if (isValidValue(&HOUR_OF_AM_PM, hours)) {
         time->hours = (int8_t) hours;
         return parsedLength;
     }
@@ -607,7 +607,7 @@ static uint8_t parseMinutesOfHour(TemporalField *temporal, Time *time, const cha
     if (time == NULL) return TEXT_NOT_PARSED;
     uint8_t parsedLength = 0;
     int64_t minutes = extractTemporalNumber(temporal, text, &parsedLength);
-    if (isValidValue(MINUTE_OF_HOUR_RANGE, minutes)) {
+    if (isValidValue(&MINUTE_OF_HOUR_RANGE, minutes)) {
         time->minutes = (int8_t) minutes;
         return parsedLength;
     }
@@ -618,7 +618,7 @@ static uint8_t parseSecondsOfMinute(TemporalField *temporal, Time *time, const c
     if (time == NULL) return TEXT_NOT_PARSED;
     uint8_t parsedLength = 0;
     int64_t seconds = extractTemporalNumber(temporal, text, &parsedLength);
-    if (isValidValue(SECOND_OF_MINUTE_RANGE, seconds)) {
+    if (isValidValue(&SECOND_OF_MINUTE_RANGE, seconds)) {
         time->seconds = (int8_t) seconds;
         return parsedLength;
     }
@@ -629,7 +629,7 @@ static uint8_t parseMilliseconds(TemporalField *temporal, Time *time, const char
     if (time == NULL) return TEXT_NOT_PARSED;
     uint8_t parsedLength = 0;
     int64_t millis = extractTemporalNumber(temporal, text, &parsedLength);
-    if (isValidValue(MILLIS_OF_SECOND_RANGE, millis)) {
+    if (isValidValue(&MILLIS_OF_SECOND_RANGE, millis)) {
         time->millis = (int16_t) millis;
         return parsedLength;
     }

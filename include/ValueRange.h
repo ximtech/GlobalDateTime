@@ -26,6 +26,6 @@ static const ValueRange DAY_OF_YEAR_RANGE = {.min = 1, .max = 366};
 
 static const ValueRange EPOCH_DAY_RANGE = {.min = -365243219162, .max = 365241780471};
 
-static inline bool isValidValue(ValueRange range, int64_t value) {
-    return (value >= range.min && value <= range.max);
+static inline bool isValidValue(const ValueRange *range, int64_t value) {
+    return (value >= range->min && value <= range->max);
 }

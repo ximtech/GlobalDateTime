@@ -37,7 +37,7 @@ Time timeOfHourAndMinutes(uint8_t hours, uint8_t minutes) {
 
 Time timeOfSecondOfDay(uint32_t secondOfDay) {
     Time time = UNINITIALIZED_TIME;
-    if (isValidValue(SECOND_OF_DAY_RANGE, secondOfDay)) {
+    if (isValidValue(&SECOND_OF_DAY_RANGE, secondOfDay)) {
         uint8_t hours = secondOfDay / SECONDS_PER_HOUR;
         secondOfDay -= hours * SECONDS_PER_HOUR;
         uint8_t minutes = secondOfDay / SECONDS_PER_MINUTE;
@@ -49,7 +49,7 @@ Time timeOfSecondOfDay(uint32_t secondOfDay) {
 
 Time timeOfMillisOfDay(uint32_t millisOfDay) {
     Time time = UNINITIALIZED_TIME;
-    if (isValidValue(MILLIS_OF_DAY_RANGE, millisOfDay)) {
+    if (isValidValue(&MILLIS_OF_DAY_RANGE, millisOfDay)) {
         uint8_t hours = millisOfDay / MILLIS_PER_HOUR;
         millisOfDay -= hours * MILLIS_PER_HOUR;
         uint8_t minutes = millisOfDay / MILLIS_PER_MINUTE;
@@ -63,7 +63,7 @@ Time timeOfMillisOfDay(uint32_t millisOfDay) {
 
 Time timeOfMicrosOfDay(int64_t microsOfDay) {
     Time time = UNINITIALIZED_TIME;
-    if (isValidValue(MICROS_OF_DAY_RANGE, microsOfDay)) {
+    if (isValidValue(&MICROS_OF_DAY_RANGE, microsOfDay)) {
         uint8_t hours = microsOfDay / MICROS_PER_HOUR;
         microsOfDay -= hours * MICROS_PER_HOUR;
         uint8_t minutes = microsOfDay / MICROS_PER_MINUTE;
@@ -194,8 +194,8 @@ static void setTime(Time *time, uint8_t hours, uint8_t minutes, uint8_t seconds,
 }
 
 static bool isProvidedTimeValid(uint8_t hours, uint8_t minutes, uint8_t seconds, uint16_t millis) {
-    return isValidValue(HOUR_OF_DAY_RANGE, hours) &&
-           isValidValue(MINUTE_OF_HOUR_RANGE, minutes) &&
-           isValidValue(SECOND_OF_MINUTE_RANGE, seconds) &&
-           isValidValue(MILLIS_OF_SECOND_RANGE, millis);
+    return isValidValue(&HOUR_OF_DAY_RANGE, hours) &&
+           isValidValue(&MINUTE_OF_HOUR_RANGE, minutes) &&
+           isValidValue(&SECOND_OF_MINUTE_RANGE, seconds) &&
+           isValidValue(&MILLIS_OF_SECOND_RANGE, millis);
 }
