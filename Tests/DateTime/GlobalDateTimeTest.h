@@ -442,6 +442,20 @@ static MunitResult testZDTParseConflicts(const MunitParameter params[], void *da
     return MUNIT_OK;
 }
 
+static MunitResult testZDTDstCheck(const MunitParameter params[], void *data) {
+    DateTimeFormatter parser;
+    parseDateTimePattern(&parser, "yyyy-MM-dd HH:mm:ss [Z]");
+    ZonedDateTime winter = parseToZonedDateTime("2021-11-27 09:00:00 [Europe/Amsterdam]", &parser);
+    ZonedDateTime summer = parseToZonedDateTime("2021-03-28 09:00:00 [Europe/Amsterdam]", &parser);
+
+    assert_true(winter.zone.utcOffset == 7200);
+    assert_true(winter.offset == 3600);
+
+    assert_true(summer.zone.utcOffset == 7200);
+    assert_true(summer.offset == 7200);
+    return MUNIT_OK;
+}
+
 static MunitTest dateTimeFormatterTests[] = {
         {.name =  "Test timeZoneOf() - should correctly parse and return time zone", .test = testTimeZoneOf},
         {.name =  "Test parseDateTimePattern() - when invalid pattern should fail", .test = testInvalidFormatPattern},
@@ -457,6 +471,7 @@ static MunitTest dateTimeFormatterTests[] = {
         {.name =  "Test parseToDateTime() - should fail for invalid string", .test = testDateTimeParseInvalid},
         {.name =  "Test parseToZonedDateTime() - should correctly parse string to ZonedDateTime struct", .test = testZDTParseByPattern},
         {.name =  "Test parseToZonedDateTime() - check for parsing date-time conflicts", .test = testZDTParseConflicts},
+        {.name =  "Test parseToZonedDateTime() - check for correct DST parsing", .test = testZDTDstCheck},
         END_OF_TESTS
 };
 

@@ -213,9 +213,10 @@ DateTime parseToDateTime(const char *text, DateTimeFormatter *formatter) {
 
 ZonedDateTime parseToZonedDateTime(const char *text, DateTimeFormatter *formatter) {
     if (formatter != NULL && formatter->isFormatValid) {
-        ZonedDateTime zonedDateTime = {0};
-        if (dateTimeParse(text, formatter->formatEntities, &zonedDateTime.dateTime.date, &zonedDateTime.dateTime.time, &zonedDateTime.zone)) {
-            return zonedDateTime;
+        DateTime dateTime = {0};
+        TimeZone zone = {0};
+        if (dateTimeParse(text, formatter->formatEntities, &dateTime.date, &dateTime.time, &zone)) {
+            return zonedDateTimeOfDateTime(&dateTime, &zone);
         }
     }
     return UNINITIALIZED_ZONED_DATE_TIME;
