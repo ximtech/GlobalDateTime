@@ -2,6 +2,9 @@
 
 #include <stdint.h>
 
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+#endif
 
 static inline int64_t minInt64(int64_t x, int64_t y) {
     return ((x < y) ? x : y);

@@ -1,7 +1,6 @@
 #include "include/GlobalDateTime.h"
 
 #define MONTH_NAME_MAX_LENGTH 9
-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 #define INVALID_NUMBER_VALUE (-1)
 #define TEXT_NOT_PARSED 0
 
