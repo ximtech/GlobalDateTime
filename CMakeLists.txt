@@ -3,9 +3,6 @@ project(GlobalDateTime VERSION 1.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 
-set(ENABLE_TIME_ZONE_SUPPORT OFF)
-set(ENABLE_TIME_ZONE_HISTORY_SUPPORT OFF)
-
 set(SOURCE_FILES
         LocalDate.c
         LocalDateTime.c
