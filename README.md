@@ -1,6 +1,7 @@
 # GlobalDateTime
 
 [![tests](https://github.com/ximtech/GlobalDateTime/actions/workflows/cmake-ci.yml/badge.svg?branch=main)](https://github.com/ximtech/GlobalDateTime/actions/workflows/cmake-ci.yml)
+[![codecov](https://codecov.io/gh/ximtech/GlobalDateTime/branch/master/graph/badge.svg?token=XjuO5pSKgq)](https://codecov.io/gh/ximtech/GlobalDateTime)
 
 Java package `java.time.*` partition to low-level C library. Fully refactored and memory optimization allow use in small
 embedded applications, designed for SMT32 microcontrollers. Written on ANSI C and no external dependencies has been
@@ -73,10 +74,6 @@ add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
 # For Clion STM32 plugin generated Cmake use 
 target_link_libraries(${PROJECT_NAME}.elf GlobalDateTime)
 ```
-
-### Code coverage
-
-<img src="https://github.com/ximtech/DateTimeZF/blob/main/example/test_coverage.png" alt="image"/>
 
 ## Usage
 
