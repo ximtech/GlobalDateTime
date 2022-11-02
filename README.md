@@ -2,6 +2,7 @@
 
 [![tests](https://github.com/ximtech/GlobalDateTime/actions/workflows/cmake-ci.yml/badge.svg?branch=main)](https://github.com/ximtech/GlobalDateTime/actions/workflows/cmake-ci.yml)
 [![codecov](https://codecov.io/gh/ximtech/GlobalDateTime/branch/main/graph/badge.svg?token=XjuO5pSKgq)](https://codecov.io/gh/ximtech/GlobalDateTime)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0a5a72592b2c4d438331ae980b3953b8)](https://www.codacy.com/gh/ximtech/CronExpression/dashboard)
 
 Java package `java.time.*` partition to low-level C library. Fully refactored and memory optimization allow use in small
 embedded applications, designed for SMT32 microcontrollers. Written on ANSI C and no external dependencies has been
