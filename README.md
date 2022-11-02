@@ -2,6 +2,7 @@
 
 [![tests](https://github.com/ximtech/GlobalDateTime/actions/workflows/cmake-ci.yml/badge.svg?branch=main)](https://github.com/ximtech/GlobalDateTime/actions/workflows/cmake-ci.yml)
 [![codecov](https://codecov.io/gh/ximtech/GlobalDateTime/branch/main/graph/badge.svg?token=XjuO5pSKgq)](https://codecov.io/gh/ximtech/GlobalDateTime)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/de05a93d0982417792aef4534da05dd7)](https://www.codacy.com/gh/ximtech/GlobalDateTime/dashboard)
 
 
 Java package `java.time.*` partition to low-level C library. Fully refactored and memory optimization allow use in small
