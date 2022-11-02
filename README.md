@@ -5,7 +5,7 @@
 
 Java package `java.time.*` partition to low-level C library. Fully refactored and memory optimization allow use in small
 embedded applications, designed for SMT32 microcontrollers. Written on ANSI C and no external dependencies has been
-used.
+used
 
 ### Package includes
 
