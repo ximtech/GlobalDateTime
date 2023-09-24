@@ -23,7 +23,7 @@ static inline int8_t int32Compare(int32_t x, int32_t y) {
     return (int8_t) ((x > y) - (x < y));
 }
 
-static int64_t floorDiv(int64_t x, int64_t y) {
+static inline int64_t floorDiv(int64_t x, int64_t y) {
     int64_t result = x / y;
     // if the signs are different and modulo not zero, round down
     if ((x ^ y) < 0 && (result * y != x)) {
@@ -32,7 +32,7 @@ static int64_t floorDiv(int64_t x, int64_t y) {
     return result;
 }
 
-static int64_t floorMod(int64_t x, int64_t y) {
+static inline int64_t floorMod(int64_t x, int64_t y) {
     int64_t mod = x % y;
     // if the signs are different and modulo not zero, adjust result
     if ((x ^ y) < 0 && mod != 0) {
@@ -41,7 +41,7 @@ static int64_t floorMod(int64_t x, int64_t y) {
     return mod;
 }
 
-static int64_t addExact(int64_t x, int64_t y) {
+static inline int64_t addExact(int64_t x, int64_t y) {
     int64_t result = x + y;
     // HD 2-12 Overflow if both arguments have the opposite sign of the result
     if (((x ^ result) & (y ^ result)) < 0) {
@@ -50,7 +50,7 @@ static int64_t addExact(int64_t x, int64_t y) {
     return result;
 }
 
-static int64_t multiplyExact(int64_t x, int64_t y) {
+static inline int64_t multiplyExact(int64_t x, int64_t y) {
     int64_t result = x * y;
     int64_t ax = absInt64(x);
     int64_t ay = absInt64(y);

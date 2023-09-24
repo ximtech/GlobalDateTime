@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inttypes.h"
+
 #include "Instant.h"
 #include "ValueRange.h"
 

@@ -1,4 +1,4 @@
-#include "include/GlobalDateTime.h"
+#include "GlobalDateTime.h"
 
 #define MONTH_NAME_MAX_LENGTH 9
 #define INVALID_NUMBER_VALUE (-1)
@@ -100,7 +100,7 @@ static inline int8_t charToOffsetSign(char signChar) {
 
 TimeZone timeZoneOf(const char *zoneId) {
     TimeZone zone = UNINITIALIZED_ZONE;
-    static TemporalField timeZoneFormat[2] = {CHRONO_FIELD_DIGIT_TIME_ZONE, CHRONO_END_OF_PATTERN};
+    static TemporalField timeZoneFormat[] = {{.field = CHRONO_FIELD_DIGIT_TIME_ZONE}, {.field = CHRONO_END_OF_PATTERN}};
     return dateTimeParse(zoneId, timeZoneFormat, NULL, NULL, &zone) ? zone : UNINITIALIZED_ZONE;
 }
 
@@ -472,11 +472,11 @@ static uint8_t parseMonth(TemporalField *temporal, Date *date, const char *text)
     if (date == NULL) return TEXT_NOT_PARSED;
     uint8_t parsedLength = 0;
     if (temporal->length == PATTERN_LENGTH_ONE) {
-        for (int i = 0; isdigit(text[i]); i++) {
+        for (int i = 0; isdigit((int) text[i]); i++) {
             parsedLength++;
         }
     } else if (temporal->length == PATTERN_LENGTH_FOUR) {
-        for (int i = 0; isalpha(text[i]); i++) {
+        for (int i = 0; isalpha((int) text[i]); i++) {
             parsedLength++;
         }
     }
@@ -776,7 +776,7 @@ static int64_t extractTemporalNumber(TemporalField *temporal, const char *text, 
     int32_t maxLength = resolvePatternFieldChar(temporal->literal).maxLength;
     uint8_t length = (temporal->length == PATTERN_LENGTH_ONE) ? maxLength : temporal->length;
     for (uint8_t i = 0; i < length && *text != '\0'; i++) {
-        if (!isdigit(*text)) {
+        if (!isdigit((int) *text)) {
             break;
         }
         buffer[i] = *text;
@@ -885,11 +885,11 @@ static uint32_t formatDayInYear(TemporalField *temporal, Date *date, char *resul
     if (!isDateValid(date)) return 0;
     uint32_t dayOfYear = getDayOfYear(date);
     if (temporal->length == PATTERN_LENGTH_ONE) {
-        return sprintf(resultBuffer, "%d", dayOfYear);
+        return sprintf(resultBuffer, "%" PRIu32, dayOfYear);
     } else if (temporal->length == PATTERN_LENGTH_TWO) {
-        return sprintf(resultBuffer, "%02d", dayOfYear);
+        return sprintf(resultBuffer, "%02" PRIu32, dayOfYear);
     } else {
-        return sprintf(resultBuffer, "%03d", dayOfYear);
+        return sprintf(resultBuffer, "%03" PRIu32, dayOfYear);
     }
 }
 
@@ -924,11 +924,11 @@ static uint32_t formatAmPmOfDay(Time *time, char *resultBuffer) {
 
 static uint32_t formatTimeValues(TemporalField *temporal, uint32_t timeValue, char *resultBuffer) {
     if (temporal->length == PATTERN_LENGTH_ONE) {
-        return sprintf(resultBuffer, "%d", timeValue);
+        return sprintf(resultBuffer, "%" PRIu32, timeValue);
     } else if (temporal->length == PATTERN_LENGTH_TWO) {
-        return sprintf(resultBuffer, "%02d", timeValue);
+        return sprintf(resultBuffer, "%02" PRIu32, timeValue);
     } else {
-        return sprintf(resultBuffer, "%03d", timeValue);
+        return sprintf(resultBuffer, "%03" PRIu32, timeValue);
     }
 }
 
@@ -950,13 +950,13 @@ static uint32_t formatDigitTimeZone(TemporalField *temporal, Date *date, Time *t
     int32_t minutes = (zoneUtcOffset / SECONDS_PER_MINUTE) % MINUTES_PER_HOUR;
 
     if (temporal->length < PATTERN_LENGTH_FOUR) {
-        return sprintf(resultBuffer, "%+03d%02d", hours, minutes);
+        return sprintf(resultBuffer, "%+03" PRIi32 "%02" PRIi32, hours, minutes);
     } else if (temporal->length == PATTERN_LENGTH_FOUR) {
-        return sprintf(resultBuffer, "GMT%+03d:%02d", hours, minutes);
+        return sprintf(resultBuffer, "GMT%+03" PRIi32 ":%02" PRIi32, hours, minutes);
     }
     int32_t seconds = (abs(zoneUtcOffset) - (abs(hours) * SECONDS_PER_HOUR)) - (minutes * SECONDS_PER_MINUTE);
     if (seconds > 0) {
-        return sprintf(resultBuffer, "%+03d:%02d:%02d", hours, minutes, seconds);
+        return sprintf(resultBuffer, "%+03" PRIi32 ":%02" PRIi32 ":%02" PRIi32, hours, minutes, seconds);
     }
-    return sprintf(resultBuffer, "%+03d:%02d", hours, minutes);
+    return sprintf(resultBuffer, "%+03" PRIi32 ":%02" PRIi32, hours, minutes);
 }
