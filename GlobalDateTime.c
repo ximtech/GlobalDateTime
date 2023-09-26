@@ -821,7 +821,7 @@ static uint32_t formatEra(TemporalField *temporal, Date *date, char *resultBuffe
 static uint32_t formatYear(TemporalField *temporal, Date *date, char *resultBuffer) {
     if (!isDateValid(date)) return 0;
     if (temporal->length == PATTERN_LENGTH_ONE) {
-        return sprintf(resultBuffer, "%lld", date->year);
+        return sprintf(resultBuffer, "%" PRIi64, date->year);
     }
     int64_t year = date->year;
     uint8_t yearDigitCount = 0;
@@ -838,16 +838,16 @@ static uint32_t formatYear(TemporalField *temporal, Date *date, char *resultBuff
 
     uint8_t thirdDigit = date->year % 1000 / 100;
     if (temporal->length == PATTERN_LENGTH_THREE) {
-        return yearDigitCount >= PATTERN_LENGTH_THREE ? sprintf(resultBuffer, "%lld", date->year) : sprintf(resultBuffer, "%d%d%d", thirdDigit, secondDigit, firstDigit);
+        return yearDigitCount >= PATTERN_LENGTH_THREE ? sprintf(resultBuffer, "%" PRIi64, date->year) : sprintf(resultBuffer, "%d%d%d", thirdDigit, secondDigit, firstDigit);
     }
 
     uint8_t fourthDigit = date->year % 10000 / 1000;
     if (temporal->length == PATTERN_LENGTH_FOUR) {
-        return yearDigitCount >= PATTERN_LENGTH_FOUR ? sprintf(resultBuffer, "%lld", date->year) : sprintf(resultBuffer, "%d%d%d%d", fourthDigit, thirdDigit, secondDigit, firstDigit);
+        return yearDigitCount >= PATTERN_LENGTH_FOUR ? sprintf(resultBuffer, "%" PRIi64, date->year) : sprintf(resultBuffer, "%d%d%d%d", fourthDigit, thirdDigit, secondDigit, firstDigit);
     }
 
     uint8_t fifthDigit = date->year % 100000 / 10000;
-    return yearDigitCount >= PATTERN_LENGTH_FIVE ? sprintf(resultBuffer, "%lld", date->year) : sprintf(resultBuffer, "%d%d%d%d%d", fifthDigit, fourthDigit, thirdDigit, secondDigit, firstDigit);
+    return yearDigitCount >= PATTERN_LENGTH_FIVE ? sprintf(resultBuffer, "%" PRIi64, date->year) : sprintf(resultBuffer, "%d%d%d%d%d", fifthDigit, fourthDigit, thirdDigit, secondDigit, firstDigit);
 }
 
 static uint32_t formatMonth(TemporalField *temporal, Date *date, char *resultBuffer) {
