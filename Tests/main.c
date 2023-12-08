@@ -1,6 +1,6 @@
 #include "DateTime/LocalTimeTest.h"
 #include "DateTime/LocalDateTest.h"
-#include "DateTime/IntantTest.h"
+#include "DateTime/InstantTest.h"
 #include "DateTime/LocalDateTimeTest.h"
 #include "DateTime/ZonedDateTimeTest.h"
 #include "DateTime/TimeZoneTest.h"

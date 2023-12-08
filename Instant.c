@@ -1,8 +1,8 @@
 #include "Instant.h"
 
 
-static void setInstant(Instant *instant, int64_t seconds, int32_t micros);
-static void instantPlus(Instant *instant, int64_t secondsToAdd, int64_t microsToAdd);
+static Instant * setInstant(Instant *instant, int64_t seconds, int32_t micros);
+static Instant * instantPlus(Instant *instant, int64_t secondsToAdd, int64_t microsToAdd);
 
 
 Instant instantOfEpochSeconds(int64_t epochSecond) {
@@ -27,28 +27,28 @@ Instant instantOfEpochMillis(int64_t epochMilli) {
     return instant;
 }
 
-void instantPlusSeconds(Instant *instant, int64_t secondsToAdd) {
-    instantPlus(instant, secondsToAdd, 0);
+Instant *instantPlusSeconds(Instant *instant, int64_t secondsToAdd) {
+    return instantPlus(instant, secondsToAdd, 0);
 }
 
-void instantPlusMillis(Instant *instant, int64_t millisToAdd) {
+Instant *instantPlusMillis(Instant *instant, int64_t millisToAdd) {
     return instantPlus(instant, millisToAdd / 1000, (millisToAdd % 1000) * 1000);
 }
 
-void instantPlusMicros(Instant *instant, int64_t microsToAdd) {
-    instantPlus(instant, 0, microsToAdd);
+Instant *instantPlusMicros(Instant *instant, int64_t microsToAdd) {
+    return instantPlus(instant, 0, microsToAdd);
 }
 
-void instantMinusSeconds(Instant *instant, int64_t secondsToSubtract) {
-    instantPlusSeconds(instant, -secondsToSubtract);
+Instant *instantMinusSeconds(Instant *instant, int64_t secondsToSubtract) {
+    return instantPlusSeconds(instant, -secondsToSubtract);
 }
 
-void instantMinusMillis(Instant *instant, int64_t millisToSubtract) {
-   instantPlusMillis(instant, -millisToSubtract);
+Instant *instantMinusMillis(Instant *instant, int64_t millisToSubtract) {
+   return instantPlusMillis(instant, -millisToSubtract);
 }
 
-void instantMinusMicros(Instant *instant, int64_t microsToSubtract) {
-    instantPlusMicros(instant, -microsToSubtract);
+Instant *instantMinusMicros(Instant *instant, int64_t microsToSubtract) {
+    return instantPlusMicros(instant, -microsToSubtract);
 }
 
 int64_t instantToEpochMillis(Instant *instant) {
@@ -78,19 +78,24 @@ bool isInstantBefore(Instant *instant, Instant *other) {
     return instantCompare(instant, other) < 0;
 }
 
+bool isInstantBetween(Instant *instant, Instant *startExclusive, Instant *endExclusive) {
+    return isInstantAfter(instant, startExclusive) && isInstantBefore(instant, endExclusive);
+}
+
 bool isInstantEquals(Instant *instant, Instant *other) {
     return instantCompare(instant, other) == 0;
 }
 
-static void setInstant(Instant *instant, int64_t seconds, int32_t micros) {
+static Instant *setInstant(Instant *instant, int64_t seconds, int32_t micros) {
     if (seconds >= INSTANT_MIN_SECONDS && seconds <= INSTANT_MAX_SECONDS) {
         instant->seconds = seconds;
         instant->micros = micros;
     }
+    return instant;
 }
 
-static void instantPlus(Instant *instant, int64_t secondsToAdd, int64_t microsToAdd) {
-    if (instant == NULL || (secondsToAdd | microsToAdd) == 0) return;
+static Instant *instantPlus(Instant *instant, int64_t secondsToAdd, int64_t microsToAdd) {
+    if (instant == NULL || (secondsToAdd | microsToAdd) == 0) return instant;
     int64_t epochSeconds = instant->seconds + secondsToAdd;
     epochSeconds += microsToAdd / MICROS_PER_SECOND;
     microsToAdd = microsToAdd % MICROS_PER_SECOND;
@@ -98,5 +103,5 @@ static void instantPlus(Instant *instant, int64_t secondsToAdd, int64_t microsTo
 
     int64_t seconds = epochSeconds + floorDiv(microAdjustment, MICROS_PER_SECOND);
     int32_t microsOfSecond = (int32_t) floorMod(microAdjustment, MICROS_PER_SECOND);
-    setInstant(instant, seconds, microsOfSecond);
+    return setInstant(instant, seconds, microsOfSecond);
 }

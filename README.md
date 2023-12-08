@@ -288,6 +288,18 @@ Check header files for full function description
   printf("Is second before first: %s\n", isDateTimeBefore(&second, &first) ? "Yes" : "No"); // Yes
   printf("Is first equals second: %s\n", isDateTimeEquals(&first, &second) ? "Yes" : "No"); // No
 ```
+
+### Date-time between
+**Note**: Time, Date and Instant have same functionality
+```c
+  DateTime baseDt = dateTimeOf(2023, DECEMBER, 7, 9, 0);
+  DateTime *startDt = dateTimeMinusMinutes(&DATE_TIME_COPY(baseDt), 5);    // copy original date-time with macro
+  DateTime *endDt = dateTimePlusMinutes(&DATE_TIME_COPY(baseDt), 5);
+
+  DateTime now = dateTimeOf(2023, DECEMBER, 7, 9, 3);
+  printf("Is now between start and end: %s\n", isDateTimeBetween(&now, startDt, endDt) ? "Yes" : "No");
+```
+
 ### Formatting date-time and parsing string(Date, Time, DateTime, ZonedDateTime, TimeZone)
 See below all available parser and format types
 ```c

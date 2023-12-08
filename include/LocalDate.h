@@ -7,6 +7,8 @@
 /*The number of days from year zero to year 1970. There are five 400 year cycles from year zero to 2000. There are 7 leap years from 1970 to 2000.*/
 #define DAYS_0000_TO_1970 ((DAYS_PER_CYCLE * 5L) - (30L * 365L + 7L))
 
+#define DATE_COPY(date) ((Date){.day = (date).day, .month = (date).month, .year = (date).year, .weekDay = (date).weekDay})
+
 static const char *const WEEK_DAY_NAME_SHORT[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 static const char *const WEEK_DAY_NAME_LONG[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 static const char *const MONTH_NAME_SHORT[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -98,7 +100,7 @@ int64_t dateToEpochSeconds(Date *date, Time *time, const TimeZone *zone);
  * Instead of returning an invalid result, the last valid day of the month, 2009-02-28, is selected instead.
  * Params:
     * yearsToAdd – the years to add, may be negative*/
-void datePlusYears(Date *date, int64_t yearsToAdd);
+Date * datePlusYears(Date *date, int64_t yearsToAdd);
 
 /* This method adds the specified amount to the months field in three steps:
  * Add the input months to the month-of-year field
@@ -108,21 +110,21 @@ void datePlusYears(Date *date, int64_t yearsToAdd);
  * Instead of returning an invalid result, the last valid day of the month, 2007-04-30, is selected instead.
  * Params:
     * monthsToAdd – the months to add, may be negative*/
-void datePlusMonths(Date *date, int64_t monthsToAdd);
+Date * datePlusMonths(Date *date, int64_t monthsToAdd);
 
 /* This method adds the specified amount in weeks to the days field incrementing the month and year fields as necessary to ensure the result remains valid.
  * The result is only invalid if the maximum/minimum year is exceeded.
  * For example, 2008-12-31 plus one week would result in 2009-01-07.
  * Params:
     * weeksToAdd – the weeks to add, may be negative*/
-void datePlusWeeks(Date *date, int64_t weeksToAdd);
+Date * datePlusWeeks(Date *date, int64_t weeksToAdd);
 
 /* This method adds the specified amount to the days field incrementing the month and year fields as necessary to ensure the result remains valid.
  * The result is only invalid if the maximum/minimum year is exceeded.
  * For example, 2008-12-31 plus one day would result in 2009-01-01.
  * Params:
     * daysToAdd – the days to add, may be negative*/
-void datePlusDays(Date *date, int64_t daysToAdd);
+Date * datePlusDays(Date *date, int64_t daysToAdd);
 
 /* This method subtracts the specified amount from the years field in three steps:
  * Subtract the input years from the year field
@@ -132,7 +134,7 @@ void datePlusDays(Date *date, int64_t daysToAdd);
  * Instead of returning an invalid result, the last valid day of the month, 2007-02-28, is selected instead.
  * Params:
     * yearsToSubtract – the years to subtract, may be negative*/
-void dateMinusYears(Date *date, int64_t yearsToSubtract);
+Date * dateMinusYears(Date *date, int64_t yearsToSubtract);
 
 /* This method subtracts the specified amount from the months field in three steps:
  * Subtract the input months from the month-of-year field
@@ -142,21 +144,21 @@ void dateMinusYears(Date *date, int64_t yearsToSubtract);
  * Instead of returning an invalid result, the last valid day of the month, 2007-02-28, is selected instead.
  * Params:
     * monthsToSubtract – the months to subtract, may be negative*/
-void dateMinusMonths(Date *date, int64_t monthsToSubtract);
+Date * dateMinusMonths(Date *date, int64_t monthsToSubtract);
 
 /* This method subtracts the specified amount in weeks from the days field decrementing the month and year fields as necessary to ensure the result remains valid.
  * The result is only invalid if the maximum/minimum year is exceeded.
  * For example, 2009-01-07 minus one week would result in 2008-12-31.
  * Params:
     * weeksToSubtract – the weeks to subtract, may be negative*/
-void dateMinusWeeks(Date *date, int64_t weeksToSubtract);
+Date * dateMinusWeeks(Date *date, int64_t weeksToSubtract);
 
 /* This method subtracts the specified amount from the days field decrementing the month and year fields as necessary to ensure the result remains valid.
  * The result is only invalid if the maximum/minimum year is exceeded.
  * For example, 2009-01-01 minus one day would result in 2008-12-31.
  * Params:
     * daysToSubtract – the days to subtract, may be negative*/
-void dateMinusDays(Date *date, int64_t daysToSubtract);
+Date * dateMinusDays(Date *date, int64_t daysToSubtract);
 
 /* Compares this date to another date.
  * The comparison is primarily based on the date, from earliest to latest.
@@ -192,9 +194,23 @@ bool isDateAfter(Date *date, Date *other);
  * This method only considers the position of the two dates on the time-line.
  * Params:
  *  date - specified date
- *  other – the other date to compare to, not null
+ *  other – the other date to compare to
  * Returns: true if this date is before the specified date*/
 bool isDateBefore(Date *date, Date *other);
+
+/* Checks if this date is between two days.
+ * This checks to see if this date represents a point on the time-line between the other two dates.
+ *         Date a = dateOf(2012, 6, 30);
+ *         Date b = dateOf(2012, 6, 28);
+ *         Date c = dateOf(2012, 7, 1);
+ *         isDateBetween(&a, &b, &c) == true
+ * This method only considers the position of the two dates on the time-line.
+ * Params:
+ *  date - specified date
+ *  startExclusive – from date, exclusive
+ *  endExclusive – up to date, exclusive
+ * Returns: true if this date is between two specified dates*/
+bool isDateBetween(Date *date, Date *startExclusive, Date *endExclusive);
 
 /* Checks if this date is equal to the specified date.
  * This checks to see if this date represents the same point on the local time-line as the other date.

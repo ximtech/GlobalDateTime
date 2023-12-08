@@ -7,7 +7,7 @@ static const ZonedDateTime UNINITIALIZED_ZONED_DATE_TIME = {
         .dateTime.time = {.hours = -1, .minutes = -1, .seconds = -1, .millis = -1},
         .zone = {.id = NULL}};
 
-static void setLocalZoneDateTime(ZonedDateTime *zonedDateTime);
+static ZonedDateTime *setLocalZoneDateTime(ZonedDateTime *zonedDateTime);
 
 
 ZonedDateTime zonedDateTimeOf(int64_t year, Month month, uint8_t dayOfMonth, uint8_t hours, uint8_t minutes, uint8_t seconds, uint16_t millis, const TimeZone *zone) {
@@ -60,76 +60,76 @@ ZonedDateTime zonedDateTimeWithSameInstant(ZonedDateTime *zonedDateTime, const T
     return UNINITIALIZED_ZONED_DATE_TIME;
 }
 
-void zonedDateTimePlusYears(ZonedDateTime *zonedDateTime, int64_t years) {
+ZonedDateTime *zonedDateTimePlusYears(ZonedDateTime *zonedDateTime, int64_t years) {
     dateTimePlusYears(&zonedDateTime->dateTime, years);
     return setLocalZoneDateTime(zonedDateTime);
 }
 
-void zonedDateTimePlusMonths(ZonedDateTime *zonedDateTime, int64_t months) {
+ZonedDateTime *zonedDateTimePlusMonths(ZonedDateTime *zonedDateTime, int64_t months) {
     dateTimePlusMonths(&zonedDateTime->dateTime, months);
     return setLocalZoneDateTime(zonedDateTime);
 }
 
-void zonedDateTimePlusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks) {
+ZonedDateTime *zonedDateTimePlusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks) {
     dateTimePlusWeeks(&zonedDateTime->dateTime, weeks);
     return setLocalZoneDateTime(zonedDateTime);
 }
 
-void zonedDateTimePlusDays(ZonedDateTime *zonedDateTime, int64_t days) {
+ZonedDateTime *zonedDateTimePlusDays(ZonedDateTime *zonedDateTime, int64_t days) {
     dateTimePlusDays(&zonedDateTime->dateTime, days);
     return setLocalZoneDateTime(zonedDateTime);
 }
 
-void zonedDateTimePlusHours(ZonedDateTime *zonedDateTime, int64_t hours) {
+ZonedDateTime *zonedDateTimePlusHours(ZonedDateTime *zonedDateTime, int64_t hours) {
     dateTimePlusHours(&zonedDateTime->dateTime, hours);
     return setLocalZoneDateTime(zonedDateTime);
 }
 
-void zonedDateTimePlusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes) {
+ZonedDateTime *zonedDateTimePlusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes) {
     dateTimePlusMinutes(&zonedDateTime->dateTime, minutes);
     return setLocalZoneDateTime(zonedDateTime);
 }
 
-void zonedDateTimePlusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds) {
+ZonedDateTime *zonedDateTimePlusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds) {
     dateTimePlusSeconds(&zonedDateTime->dateTime, seconds);
     return setLocalZoneDateTime(zonedDateTime);
 }
 
-void zonedDateTimePlusMillis(ZonedDateTime *zonedDateTime, int64_t millis) {
+ZonedDateTime *zonedDateTimePlusMillis(ZonedDateTime *zonedDateTime, int64_t millis) {
     dateTimePlusMillis(&zonedDateTime->dateTime, millis);
     return setLocalZoneDateTime(zonedDateTime);
 }
 
-void zonedDateTimeMinusYears(ZonedDateTime *zonedDateTime, int64_t years) {
-    zonedDateTimePlusYears(zonedDateTime, -years);
+ZonedDateTime *zonedDateTimeMinusYears(ZonedDateTime *zonedDateTime, int64_t years) {
+    return zonedDateTimePlusYears(zonedDateTime, -years);
 }
 
-void zonedDateTimeMinusMonths(ZonedDateTime *zonedDateTime, int64_t months) {
-    zonedDateTimePlusMonths(zonedDateTime, -months);
+ZonedDateTime *zonedDateTimeMinusMonths(ZonedDateTime *zonedDateTime, int64_t months) {
+    return zonedDateTimePlusMonths(zonedDateTime, -months);
 }
 
-void zonedDateTimeMinusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks) {
-    zonedDateTimePlusWeeks(zonedDateTime, -weeks);
+ZonedDateTime *zonedDateTimeMinusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks) {
+    return zonedDateTimePlusWeeks(zonedDateTime, -weeks);
 }
 
-void zonedDateTimeMinusDays(ZonedDateTime *zonedDateTime, int64_t days) {
-    zonedDateTimePlusDays(zonedDateTime, -days);
+ZonedDateTime *zonedDateTimeMinusDays(ZonedDateTime *zonedDateTime, int64_t days) {
+    return zonedDateTimePlusDays(zonedDateTime, -days);
 }
 
-void zonedDateTimeMinusHours(ZonedDateTime *zonedDateTime, int64_t hours) {
-    zonedDateTimePlusHours(zonedDateTime, -hours);
+ZonedDateTime *zonedDateTimeMinusHours(ZonedDateTime *zonedDateTime, int64_t hours) {
+    return zonedDateTimePlusHours(zonedDateTime, -hours);
 }
 
-void zonedDateTimeMinusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes) {
-    zonedDateTimePlusMinutes(zonedDateTime, -minutes);
+ZonedDateTime *zonedDateTimeMinusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes) {
+    return zonedDateTimePlusMinutes(zonedDateTime, -minutes);
 }
 
-void zonedDateTimeMinusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds) {
-    zonedDateTimePlusSeconds(zonedDateTime, -seconds);
+ZonedDateTime *zonedDateTimeMinusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds) {
+    return zonedDateTimePlusSeconds(zonedDateTime, -seconds);
 }
 
-void zonedDateTimeMinusMillis(ZonedDateTime *zonedDateTime, int64_t millis) {
-    zonedDateTimePlusMillis(zonedDateTime, -millis);
+ZonedDateTime *zonedDateTimeMinusMillis(ZonedDateTime *zonedDateTime, int64_t millis) {
+    return zonedDateTimePlusMillis(zonedDateTime, -millis);
 }
 
 bool isZonedDateTimeEquals(ZonedDateTime *zonedDateTime, ZonedDateTime *other) {
@@ -139,7 +139,7 @@ bool isZonedDateTimeEquals(ZonedDateTime *zonedDateTime, ZonedDateTime *other) {
            isTimeZoneEquals(&zonedDateTime->zone, &other->zone);
 }
 
-static void setLocalZoneDateTime(ZonedDateTime *zonedDateTime) {
+static ZonedDateTime *setLocalZoneDateTime(ZonedDateTime *zonedDateTime) {
     int64_t epochSeconds = dateTimeToEpochSecond(&zonedDateTime->dateTime, UTC_OFFSET);
 
     int32_t storedOffset = zonedDateTime->zone.utcOffset;
@@ -155,4 +155,5 @@ static void setLocalZoneDateTime(ZonedDateTime *zonedDateTime) {
         }
     }
     zonedDateTime->offset = storedOffset;
+    return zonedDateTime;
 }

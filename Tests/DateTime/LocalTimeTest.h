@@ -577,6 +577,34 @@ static MunitResult testTimeCompare(const MunitParameter params[], void *data) {
     return MUNIT_OK;
 }
 
+static MunitResult testTimeBetween(const MunitParameter params[], void *data) {
+    Time expected = timeOf(12, 20, 0);
+    Time *before = timeMinusMinutes(&TIME_COPY(expected), 5);
+    Time *after = timePlusMinutes(&TIME_COPY(expected), 5);
+
+    Time *test = timePlusMinutes(&TIME_COPY(expected), 3);
+    assert_true(isTimeBetween(test, before, after));
+
+    test = timePlusMinutes(&TIME_COPY(expected), 3);
+    assert_true(isTimeBetween(test, before, after));
+
+    test = timeMinusMinutes(&TIME_COPY(expected), 3);
+    assert_true(isTimeBetween(test, before, after));
+
+    test = timePlusMinutes(&TIME_COPY(expected), 5);   // exclusive
+    assert_false(isTimeBetween(test, before, after));
+
+    test = timePlusMinutes(&TIME_COPY(expected), 5);   // exclusive
+    assert_false(isTimeBetween(test, before, after));
+
+    test = timePlusMinutes(&TIME_COPY(expected), 6);
+    assert_false(isTimeBetween(test, before, after));
+
+    test = timePlusMinutes(&TIME_COPY(expected), 6);
+    assert_false(isTimeBetween(test, before, after));
+    return MUNIT_OK;
+}
+
 static MunitTest timeTests[] = {
         {.name =  "Test midnight - midnight value should be correctly set", .test = testMidnightTime},
         {.name =  "Test all seconds in day", .test = testAllSecondsInDay},
@@ -599,6 +627,7 @@ static MunitTest timeTests[] = {
         {.name =  "Test timeToSecondsOfDay() - should correctly convert time to seconds of day", .test = testTimeToSecondsOfDay},
         {.name =  "Test timeToMillisOfDay() - should correctly convert time to milliseconds of day", .test = testTimeToMillisOfDay},
         {.name =  "Test timeCompare() - should correctly compare two time instances", .test = testTimeCompare},
+        {.name =  "Test isTimeBetween() - should correctly check that time is between two other times", .test = testTimeBetween},
         END_OF_TESTS
 };
 

@@ -55,68 +55,80 @@ DateTime dateTimeAtStartOfDay(Date *date) {
     return dateTimeFrom(date, &MIDNIGHT);
 }
 
-void dateTimePlusYears(DateTime *dateTime, int64_t years) {
+DateTime *dateTimePlusYears(DateTime *dateTime, int64_t years) {
     datePlusYears(&dateTime->date, years);
+    return dateTime;
 }
 
-void dateTimePlusMonths(DateTime *dateTime, int64_t months) {
+DateTime *dateTimePlusMonths(DateTime *dateTime, int64_t months) {
     datePlusMonths(&dateTime->date, months);
+    return dateTime;
 }
 
-void dateTimePlusWeeks(DateTime *dateTime, int64_t weeks) {
+DateTime *dateTimePlusWeeks(DateTime *dateTime, int64_t weeks) {
     datePlusWeeks(&dateTime->date, weeks);
+    return dateTime;
 }
 
-void dateTimePlusDays(DateTime *dateTime, int64_t days) {
+DateTime *dateTimePlusDays(DateTime *dateTime, int64_t days) {
     datePlusDays(&dateTime->date, days);
+    return dateTime;
 }
 
-void dateTimePlusHours(DateTime *dateTime, int64_t hours) {
+DateTime *dateTimePlusHours(DateTime *dateTime, int64_t hours) {
     plusWithOverflow(&dateTime->date, &dateTime->time, hours, 0, 0, 0, 1);
+    return dateTime;
 }
 
-void dateTimePlusMinutes(DateTime *dateTime, int64_t minutes) {
+DateTime * dateTimePlusMinutes(DateTime *dateTime, int64_t minutes) {
     plusWithOverflow(&dateTime->date, &dateTime->time, 0, minutes, 0, 0, 1);
+    return dateTime;
 }
 
-void dateTimePlusSeconds(DateTime *dateTime, int64_t seconds) {
+DateTime *dateTimePlusSeconds(DateTime *dateTime, int64_t seconds) {
     plusWithOverflow(&dateTime->date, &dateTime->time, 0, 0, seconds, 0, 1);
+    return dateTime;
 }
 
-void dateTimePlusMillis(DateTime *dateTime, int64_t millis) {
+DateTime *dateTimePlusMillis(DateTime *dateTime, int64_t millis) {
     plusWithOverflow(&dateTime->date, &dateTime->time, 0, 0, 0, millis, 1);
+    return dateTime;
 }
 
-void dateTimeMinusYears(DateTime *dateTime, int64_t years) {
-    dateTimePlusYears(dateTime, -years);
+DateTime *dateTimeMinusYears(DateTime *dateTime, int64_t years) {
+    return dateTimePlusYears(dateTime, -years);
 }
 
-void dateTimeMinusMonths(DateTime *dateTime, int64_t months) {
-    dateTimePlusMonths(dateTime, -months);
+DateTime *dateTimeMinusMonths(DateTime *dateTime, int64_t months) {
+    return dateTimePlusMonths(dateTime, -months);
 }
 
-void dateTimeMinusWeeks(DateTime *dateTime, int64_t weeks) {
-    dateTimePlusWeeks(dateTime, -weeks);
+DateTime *dateTimeMinusWeeks(DateTime *dateTime, int64_t weeks) {
+    return dateTimePlusWeeks(dateTime, -weeks);
 }
 
-void dateTimeMinusDays(DateTime *dateTime, int64_t days) {
-    dateTimePlusDays(dateTime, -days);
+DateTime *dateTimeMinusDays(DateTime *dateTime, int64_t days) {
+    return dateTimePlusDays(dateTime, -days);
 }
 
-void dateTimeMinusHours(DateTime *dateTime, int64_t hours) {
+DateTime *dateTimeMinusHours(DateTime *dateTime, int64_t hours) {
     plusWithOverflow(&dateTime->date, &dateTime->time, hours, 0, 0, 0, -1);
+    return dateTime;
 }
 
-void dateTimeMinusMinutes(DateTime *dateTime, int64_t minutes) {
+DateTime *dateTimeMinusMinutes(DateTime *dateTime, int64_t minutes) {
     plusWithOverflow(&dateTime->date, &dateTime->time, 0, minutes, 0, 0, -1);
+    return dateTime;
 }
 
-void dateTimeMinusSeconds(DateTime *dateTime, int64_t seconds) {
+DateTime *dateTimeMinusSeconds(DateTime *dateTime, int64_t seconds) {
     plusWithOverflow(&dateTime->date, &dateTime->time, 0, 0, seconds, 0, -1);
+    return dateTime;
 }
 
-void dateTimeMinusMillis(DateTime *dateTime, int64_t millis) {
+DateTime *dateTimeMinusMillis(DateTime *dateTime, int64_t millis) {
     plusWithOverflow(&dateTime->date, &dateTime->time, 0, 0, 0, millis, -1);
+    return dateTime;
 }
 
 int64_t dateTimeToEpochSecond(DateTime *dateTime, int32_t offset) {
@@ -140,6 +152,10 @@ bool isDateTimeAfter(DateTime *dateTime, DateTime *other) {
 
 bool isDateTimeBefore(DateTime *dateTime, DateTime *other) {
     return dateTimeCompare(dateTime, other) < 0;
+}
+
+bool isDateTimeBetween(DateTime *dateTime, DateTime *startExclusive, DateTime *endExclusive) {
+    return isDateTimeAfter(dateTime, startExclusive) && isDateTimeBefore(dateTime, endExclusive);
 }
 
 bool isDateTimeEquals(DateTime *dateTime, DateTime *other) {

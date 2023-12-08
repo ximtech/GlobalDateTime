@@ -23,6 +23,8 @@
 #define MICROS_PER_HOUR   (MICROS_PER_MINUTE * MINUTES_PER_HOUR)
 #define MICROS_PER_DAY    (MICROS_PER_HOUR * HOURS_PER_DAY)
 
+#define TIME_COPY(time) ((Time){.hours = (time).hours, .minutes = (time).minutes, .seconds = (time).seconds, .millis = (time).millis})
+
 typedef struct Time {
     int8_t hours;
     int8_t minutes;
@@ -61,49 +63,49 @@ Time timeOfMicrosOfDay(int64_t microsOfDay);
  * This instance is immutable and unaffected by this method call.
  * Params:
  *  hoursToAdd – the hours to add, may be negative*/
-void timePlusHours(Time *time, int32_t hoursToAdd);
+Time *timePlusHours(Time *time, int32_t hoursToAdd);
 
 /* This adds the specified number of minutes to this time. The calculation wraps around midnight.
  * Params:
  *  minutesToAdd – the minutes to add, may be negative
  * Returns: a time based on this time with the minutes added*/
-void timePlusMinutes(Time *time, int32_t minutesToAdd);
+Time *timePlusMinutes(Time *time, int32_t minutesToAdd);
 
 /* This adds the specified number of seconds to this time. The calculation wraps around midnight.
  * Params:
  *  secondsToAdd – the seconds to add, may be negative
  * Returns: a time based on this time with the seconds added*/
-void timePlusSeconds(Time *time, int32_t secondsToAdd);
+Time *timePlusSeconds(Time *time, int32_t secondsToAdd);
 
 /* This adds the specified number of milliseconds to this time. The calculation wraps around midnight.
  * Params:
  * millisToAdd – the millis to add, may be negative
  * Returns: a time based on this time with the milliseconds added*/
-void timePlusMillis(Time *time, int32_t millisToAdd);
+Time *timePlusMillis(Time *time, int32_t millisToAdd);
 
 /* This subtracts the specified number of hours from this time. The calculation wraps around midnight.
  * Params:
  *  hoursToSubtract – the hours to subtract, may be negative
  * Returns: a time based on this time with the hours amount subtracted*/
-void timeMinusHours(Time *time, int32_t hoursToSubtract);
+Time *timeMinusHours(Time *time, int32_t hoursToSubtract);
 
 /* This subtracts the specified number of minutes from this time. The calculation wraps around midnight.
  * Params:
  *  minutesToSubtract – the minutes to subtract, may be negative
  * Returns: a time based on this time with the minutes amount subtracted*/
-void timeMinusMinutes(Time *time, int32_t minutesToSubtract);
+Time *timeMinusMinutes(Time *time, int32_t minutesToSubtract);
 
 /* This subtracts the specified number of seconds from this time. The calculation wraps around midnight.
  * Params:
  *  secondsToSubtract – the seconds to subtract, may be negative
  * Returns: a time based on this time with the seconds amount subtracted*/
-void timeMinusSeconds(Time *time, int32_t secondsToSubtract);
+Time *timeMinusSeconds(Time *time, int32_t secondsToSubtract);
 
 /* This subtracts the specified number of milliseconds from this time. The calculation wraps around midnight.
  * Params:
  * millisToSubtract – the millis to subtract, may be negative
  * Returns: a time based on this time with the milliseconds amount subtracted*/
-void timeMinusMillis(Time *time, int32_t millisToSubtract);
+Time *timeMinusMillis(Time *time, int32_t millisToSubtract);
 
 /* Extracts the time as seconds of day, from 0 to 24 * 60 * 60 - 1.
  * Returns: the second-of-day equivalent to this time*/
@@ -136,6 +138,15 @@ bool isTimeAfter(Time *time, Time *other);
  * other – the other time to compare to
  * Returns: true if time is before the specified time*/
 bool isTimeBefore(Time *time, Time *other);
+
+/* Checks if this time is between two times.
+ * The comparison is based on the time-line position of the time within a day.
+ * Params:
+ * time – time to check
+ * startExclusive – the time starts from, exclusive
+ * endExclusive – the end time period, exclusive
+ * Returns: true if time is between two times*/
+bool isTimeBetween(Time *time, Time *startExclusive, Time *endExclusive);
 
 /* Checks if this time is equal to another time.
  * The comparison is based on the time-line position of the time within a day.

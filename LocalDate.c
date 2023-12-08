@@ -2,23 +2,22 @@
 
 #define UNINITIALIZED_DATE ((Date){.year = -1, .month = 0, .day = -1})
 
-static void setDate(Date *date, int64_t year, Month month, uint8_t dayOfMonth);
+static Date * setDate(Date *date, int64_t year, Month month, uint8_t dayOfMonth);
 static bool isProvidedDateValid(int64_t year, Month month, uint8_t dayOfMonth);
-static void resolvePreviousValidDate(Date *date, int64_t year, Month month, uint8_t day);
+static Date * resolvePreviousValidDate(Date *date, int64_t year, Month month, uint8_t day);
 static Month monthPlus(Month month, uint8_t months);
 
 
 Date dateOf(int64_t year, Month month, uint8_t dayOfMonth) {
     Date date = UNINITIALIZED_DATE;
-    setDate(&date, year, month, dayOfMonth);
-    return date;
+    return isProvidedDateValid(year, month, dayOfMonth) ? *setDate(&date, year, month, dayOfMonth) : date;
 }
 
 Date dateOfEpochDay(int64_t epochDay) {
     if (isValidValue(&EPOCH_DAY_RANGE, epochDay)) {
         int64_t zeroDay = epochDay + DAYS_0000_TO_1970;
         // find the march-based year
-        zeroDay -= 60;  // adjust to 0000-03-01 so leap day is at end of four year cycle
+        zeroDay -= 60;  // adjust to 0000-03-01 so leap day is at end of four-year cycle
         int64_t adjust = 0;
         if (zeroDay < 0) {
             // adjust negative years to positive for calculation
@@ -105,45 +104,49 @@ int64_t dateToEpochSeconds(Date *date, Time *time, const TimeZone *zone) {
     return 0;
 }
 
-void datePlusYears(Date *date, int64_t yearsToAdd) {
+Date *datePlusYears(Date *date, int64_t yearsToAdd) {
     if (yearsToAdd != 0 && isDateValid(date) && isValidValue(&YEAR_RANGE, date->year + yearsToAdd)) {
-        resolvePreviousValidDate(date, date->year + yearsToAdd, date->month, date->day);
+        return resolvePreviousValidDate(date, date->year + yearsToAdd, date->month, date->day);
     }
+    return date;
 }
 
-void datePlusMonths(Date *date, int64_t monthsToAdd) {
-    if (monthsToAdd == 0 || !isDateValid(date)) return;
+Date *datePlusMonths(Date *date, int64_t monthsToAdd) {
+    if (monthsToAdd == 0 || !isDateValid(date)) {
+        return date;
+    }
     int64_t monthCount = date->year * 12 + (date->month - 1);
     int64_t calcMonths = monthCount + monthsToAdd;
     int64_t newYear = floorDiv(calcMonths, 12);
     if (isValidValue(&YEAR_RANGE, newYear)) {
         int64_t newMonth = floorMod(calcMonths, 12) + 1;
-        resolvePreviousValidDate(date, newYear, newMonth, date->day);
+        return resolvePreviousValidDate(date, newYear, newMonth, date->day);
     }
+    return date;
 }
 
-void datePlusWeeks(Date *date, int64_t weeksToAdd) {
-    datePlusDays(date, multiplyExact(weeksToAdd, 7));
+Date *datePlusWeeks(Date *date, int64_t weeksToAdd) {
+    return datePlusDays(date, multiplyExact(weeksToAdd, 7));
 }
 
-void datePlusDays(Date *date, int64_t daysToAdd) {
-    if (!isDateValid(date)) return;
+Date *datePlusDays(Date *date, int64_t daysToAdd) {
+    if (!isDateValid(date)) return date;
     int64_t totalDays = date->day + daysToAdd;
     if (totalDays > 0) {
         if (totalDays <= 28) {
-            setDate(date, date->year, date->month, totalDays);
-            return;
+            return setDate(date, date->year, date->month, totalDays);
+
         } else if (totalDays <= 59) { // 59th Jan is 28th Feb, 59th Feb is 31st Mar
             uint8_t monthLength = lengthOfMonth(date->month, isLeapYear(date->year));
             if (totalDays <= monthLength) {
-                setDate(date, date->year, date->month, totalDays);
-                return;
+                return setDate(date, date->year, date->month, totalDays);
+
             } else if (date->month < 12) {
                 return setDate(date, date->year, date->month + 1, totalDays - monthLength);
+
             } else {
                 if (isValidValue(&YEAR_RANGE, date->year + 1)) {
-                    setDate(date, date->year + 1, 1, (totalDays - monthLength));
-                    return;
+                    return setDate(date, date->year + 1, 1, (totalDays - monthLength));
                 }
             }
         }
@@ -157,22 +160,23 @@ void datePlusDays(Date *date, int64_t daysToAdd) {
         date->day = tmpDate.day;
         date->weekDay = tmpDate.weekDay;
     }
+    return date;
 }
 
-void dateMinusYears(Date *date, int64_t yearsToSubtract) {
-    datePlusYears(date, -yearsToSubtract);
+Date *dateMinusYears(Date *date, int64_t yearsToSubtract) {
+    return datePlusYears(date, -yearsToSubtract);
 }
 
-void dateMinusMonths(Date *date, int64_t monthsToSubtract) {
-    datePlusMonths(date, -monthsToSubtract);
+Date *dateMinusMonths(Date *date, int64_t monthsToSubtract) {
+    return datePlusMonths(date, -monthsToSubtract);
 }
 
-void dateMinusWeeks(Date *date, int64_t weeksToSubtract) {
-    datePlusWeeks(date, -weeksToSubtract);
+Date *dateMinusWeeks(Date *date, int64_t weeksToSubtract) {
+    return datePlusWeeks(date, -weeksToSubtract);
 }
 
-void dateMinusDays(Date *date, int64_t daysToSubtract) {
-    datePlusDays(date, -daysToSubtract);
+Date *dateMinusDays(Date *date, int64_t daysToSubtract) {
+    return datePlusDays(date, -daysToSubtract);
 }
 
 int64_t dateCompare(const Date *first, const Date *second) {
@@ -193,6 +197,10 @@ bool isDateAfter(Date *date, Date *other) {
 
 bool isDateBefore(Date *date, Date *other) {
     return dateCompare(date, other) < 0;
+}
+
+bool isDateBetween(Date *date, Date *startExclusive, Date *endExclusive) {
+    return isDateAfter(date, startExclusive) && isDateBefore(date, endExclusive);
 }
 
 bool isDateEquals(const Date *date, const Date *other) {
@@ -288,13 +296,12 @@ bool isDateValid(const Date *date) {
     return date != NULL && isProvidedDateValid(date->year, date->month, date->day);
 }
 
-static void setDate(Date *date, int64_t year, Month month, uint8_t dayOfMonth) {
-    if (isProvidedDateValid(year, month, dayOfMonth)) {
-        date->year = year;
-        date->month = month;
-        date->day = (int8_t) dayOfMonth;
-        date->weekDay = getDayOfWeek(date);
-    }
+static Date *setDate(Date *date, int64_t year, Month month, uint8_t dayOfMonth) {
+    date->year = year;
+    date->month = month;
+    date->day = (int8_t) dayOfMonth;
+    date->weekDay = getDayOfWeek(date);
+    return date;
 }
 
 static bool isProvidedDateValid(int64_t year, Month month, uint8_t dayOfMonth) {
@@ -323,7 +330,7 @@ static bool isProvidedDateValid(int64_t year, Month month, uint8_t dayOfMonth) {
 }
 
 
-static void resolvePreviousValidDate(Date *date, int64_t year, Month month, uint8_t day) {
+static Date *resolvePreviousValidDate(Date *date, int64_t year, Month month, uint8_t day) {
     switch (month) {
         case FEBRUARY:
             day = minInt64(day, isLeapYear(year) ? 29 : 28);
@@ -337,7 +344,7 @@ static void resolvePreviousValidDate(Date *date, int64_t year, Month month, uint
         default:
             break;
     }
-    setDate(date, year, month, day);
+    return setDate(date, year, month, day);
 }
 
 static Month monthPlus(Month month, uint8_t months) {

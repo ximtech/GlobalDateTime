@@ -579,6 +579,34 @@ static MunitResult testDateTimeCompare(const MunitParameter params[], void *data
     return MUNIT_OK;
 }
 
+static MunitResult testDateTimeBetween(const MunitParameter params[], void *data) {
+    DateTime expected = dateTimeOf(2023, DECEMBER, 7, 9, 0);
+    DateTime *before = dateTimeMinusMinutes(&DATE_TIME_COPY(expected), 5);
+    DateTime *after = dateTimePlusMinutes(&DATE_TIME_COPY(expected), 5);
+
+    DateTime *test = dateTimePlusMinutes(&DATE_TIME_COPY(expected), 3);
+    assert_true(isDateTimeBetween(test, before, after));
+
+    test = dateTimePlusMinutes(&DATE_TIME_COPY(expected), 3);
+    assert_true(isDateTimeBetween(test, before, after));
+
+    test = dateTimeMinusMinutes(&DATE_TIME_COPY(expected), 3);
+    assert_true(isDateTimeBetween(test, before, after));
+
+    test = dateTimePlusMinutes(&DATE_TIME_COPY(expected), 5);   // exclusive
+    assert_false(isDateTimeBetween(test, before, after));
+
+    test = dateTimePlusMinutes(&DATE_TIME_COPY(expected), 5);   // exclusive
+    assert_false(isDateTimeBetween(test, before, after));
+
+    test = dateTimePlusMinutes(&DATE_TIME_COPY(expected), 6);
+    assert_false(isDateTimeBetween(test, before, after));
+
+    test = dateTimePlusMinutes(&DATE_TIME_COPY(expected), 6);
+    assert_false(isDateTimeBetween(test, before, after));
+    return MUNIT_OK;
+}
+
 
 static MunitTest dateTimeTests[] = {
         {.name =  "Test dateTimeOf() - should validate and create date-time", .test = testDateTimeFactories},
@@ -606,6 +634,7 @@ static MunitTest dateTimeTests[] = {
 
         {.name =  "Test dateTimeToEpochSecond() - should correctly convert date-time to epoch seconds", .test = testDateTimeToEpochSecond},
         {.name =  "Test dateTimeCompare() - should correctly compare two date-time instances", .test = testDateTimeCompare},
+        {.name =  "Test isDateTimeBetween() - should correctly check date-time between period", .test = testDateTimeBetween},
         END_OF_TESTS
 };
 

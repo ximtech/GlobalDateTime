@@ -2,7 +2,7 @@
 
 #define UNINITIALIZED_TIME ((Time){.hours = -1, .minutes = -1, .seconds = -1, .millis = -1})
 
-static void setTime(Time *time, uint8_t hours, uint8_t minutes, uint8_t seconds, uint16_t millis);
+static Time * setTime(Time *time, uint8_t hours, uint8_t minutes, uint8_t seconds, uint16_t millis);
 static bool isProvidedTimeValid(uint8_t hours, uint8_t minutes, uint8_t seconds, uint16_t millis);
 
 
@@ -76,28 +76,28 @@ Time timeOfMicrosOfDay(int64_t microsOfDay) {
     return time;
 }
 
-void timePlusHours(Time *time, int32_t hoursToAdd) {
-    if (hoursToAdd == 0 || !isTimeValid(time)) return;
+Time *timePlusHours(Time *time, int32_t hoursToAdd) {
+    if (hoursToAdd == 0 || !isTimeValid(time)) return time;
     uint8_t newHours = ((hoursToAdd % HOURS_PER_DAY) + time->hours + HOURS_PER_DAY) % HOURS_PER_DAY;
-    setTime(time, newHours, time->minutes, time->seconds, 0);
+    return setTime(time, newHours, time->minutes, time->seconds, 0);
 }
 
-void timePlusMinutes(Time *time, int32_t minutesToAdd) {
-    if (minutesToAdd == 0 || !isTimeValid(time)) return;
+Time *timePlusMinutes(Time *time, int32_t minutesToAdd) {
+    if (minutesToAdd == 0 || !isTimeValid(time)) return time;
     int32_t minutesOfDay = time->hours * MINUTES_PER_HOUR + time->minutes;
     int32_t newMinutesOfDay = (minutesToAdd % MINUTES_PER_DAY + minutesOfDay + MINUTES_PER_DAY) % MINUTES_PER_DAY;
-    if (minutesOfDay == newMinutesOfDay) return;
+    if (minutesOfDay == newMinutesOfDay) return time;
 
     uint8_t newHour = newMinutesOfDay / MINUTES_PER_HOUR;
     uint8_t newMinute = newMinutesOfDay % MINUTES_PER_HOUR;
-    setTime(time, newHour, newMinute, time->seconds, 0);
+    return setTime(time, newHour, newMinute, time->seconds, 0);
 }
 
-void timePlusSeconds(Time *time, int32_t secondsToAdd) {
-    if (secondsToAdd == 0 || !isTimeValid(time)) return;
+Time *timePlusSeconds(Time *time, int32_t secondsToAdd) {
+    if (secondsToAdd == 0 || !isTimeValid(time)) return time;
     int32_t secondsOfDay = time->hours * SECONDS_PER_HOUR + time->minutes * SECONDS_PER_MINUTE + time->seconds;
     int32_t newSecondsOfDay = ((secondsToAdd % SECONDS_PER_DAY) + secondsOfDay + SECONDS_PER_DAY) % SECONDS_PER_DAY;
-    if (secondsOfDay == newSecondsOfDay) return;
+    if (secondsOfDay == newSecondsOfDay) return time;
 
     int32_t newHour = newSecondsOfDay / SECONDS_PER_HOUR;
     int32_t newMinute = (newSecondsOfDay / SECONDS_PER_MINUTE) % MINUTES_PER_HOUR;
@@ -105,33 +105,33 @@ void timePlusSeconds(Time *time, int32_t secondsToAdd) {
     return setTime(time, newHour, newMinute, newSecond, 0);
 }
 
-void timePlusMillis(Time *time, int32_t millisToAdd) {
-    if (millisToAdd == 0 || !isTimeValid(time)) return;
+Time *timePlusMillis(Time *time, int32_t millisToAdd) {
+    if (millisToAdd == 0 || !isTimeValid(time)) return time;
     uint32_t millisOfDay = timeToMillisOfDay(time);
     uint32_t newMillisOfDay = ((millisToAdd % MILLIS_PER_DAY) + millisOfDay + MILLIS_PER_DAY) % MILLIS_PER_DAY;
-    if (millisOfDay == newMillisOfDay) return;
+    if (millisOfDay == newMillisOfDay) return time;
 
     uint32_t newHour = newMillisOfDay / MILLIS_PER_HOUR;
     uint32_t newMinute = (newMillisOfDay / MILLIS_PER_MINUTE) % MINUTES_PER_HOUR;
     uint32_t newSecond = (newMillisOfDay / MILLIS_PER_SECOND) % SECONDS_PER_MINUTE;
     uint32_t newMillis = newMillisOfDay % MILLIS_PER_SECOND;
-    setTime(time, newHour, newMinute, newSecond, newMillis);
+    return setTime(time, newHour, newMinute, newSecond, newMillis);
 }
 
-void timeMinusHours(Time *time, int32_t hoursToSubtract) {
-    timePlusHours(time, -(hoursToSubtract % HOURS_PER_DAY));
+Time *timeMinusHours(Time *time, int32_t hoursToSubtract) {
+   return timePlusHours(time, -(hoursToSubtract % HOURS_PER_DAY));
 }
 
-void timeMinusMinutes(Time *time, int32_t minutesToSubtract) {
-    timePlusMinutes(time, -(minutesToSubtract % MINUTES_PER_DAY));
+Time *timeMinusMinutes(Time *time, int32_t minutesToSubtract) {
+    return timePlusMinutes(time, -(minutesToSubtract % MINUTES_PER_DAY));
 }
 
-void timeMinusSeconds(Time *time, int32_t secondsToSubtract) {
-    timePlusSeconds(time, -(secondsToSubtract % SECONDS_PER_DAY));
+Time *timeMinusSeconds(Time *time, int32_t secondsToSubtract) {
+    return timePlusSeconds(time, -(secondsToSubtract % SECONDS_PER_DAY));
 }
 
-void timeMinusMillis(Time *time, int32_t millisToSubtract) {
-    timePlusMillis(time, -millisToSubtract);
+Time *timeMinusMillis(Time *time, int32_t millisToSubtract) {
+    return timePlusMillis(time, -millisToSubtract);
 }
 
 uint32_t timeToSecondsOfDay(Time *time) {
@@ -178,6 +178,10 @@ bool isTimeBefore(Time *time, Time *other) {
     return timeCompare(time, other) < 0;
 }
 
+bool isTimeBetween(Time *time, Time *startExclusive, Time *endExclusive) {
+    return isTimeAfter(time, startExclusive) && isTimeBefore(time, endExclusive);
+}
+
 bool isTimeEquals(const Time *time, const Time *other) {
     return timeCompare(time, other) == 0;
 }
@@ -186,11 +190,12 @@ bool isTimeValid(const Time *time) {
     return time != NULL && isProvidedTimeValid(time->hours, time->minutes, time->seconds, time->millis);
 }
 
-static void setTime(Time *time, uint8_t hours, uint8_t minutes, uint8_t seconds, uint16_t millis) {
+static Time *setTime(Time *time, uint8_t hours, uint8_t minutes, uint8_t seconds, uint16_t millis) {
     time->hours = (int8_t) hours;
     time->minutes = (int8_t) minutes;
     time->seconds = (int8_t) seconds;
     time->millis = (int16_t) millis;
+    return time;
 }
 
 static bool isProvidedTimeValid(uint8_t hours, uint8_t minutes, uint8_t seconds, uint16_t millis) {

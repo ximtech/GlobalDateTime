@@ -2,6 +2,7 @@
 
 #include "LocalDateTime.h"
 
+#define Z_DATE_TIME_COPY(zdt) ((ZonedDateTime){.dateTime = (zdt).dateTime, .zone = (zdt).zone, .offset = (zdt).offset})
 
 typedef struct ZonedDateTime {
     DateTime dateTime;
@@ -91,7 +92,7 @@ ZonedDateTime zonedDateTimeWithSameInstant(ZonedDateTime *zonedDateTime, const T
  * Params:
  *  years – the years to add, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the years added*/
-void zonedDateTimePlusYears(ZonedDateTime *zonedDateTime, int64_t years);
+ZonedDateTime *zonedDateTimePlusYears(ZonedDateTime *zonedDateTime, int64_t years);
 
 /* Updates provided ZonedDateTime with the specified number of months added.
  * This operates on the local time-line, adding months to the local date-time.
@@ -100,7 +101,7 @@ void zonedDateTimePlusYears(ZonedDateTime *zonedDateTime, int64_t years);
  * Params:
  *  months – the months to add, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the months added*/
-void zonedDateTimePlusMonths(ZonedDateTime *zonedDateTime, int64_t months);
+ZonedDateTime *zonedDateTimePlusMonths(ZonedDateTime *zonedDateTime, int64_t months);
 
 /* Updates provided ZonedDateTime with the specified number of weeks added.
  * This operates on the local time-line, adding weeks to the local date-time.
@@ -109,7 +110,7 @@ void zonedDateTimePlusMonths(ZonedDateTime *zonedDateTime, int64_t months);
  * Params:
  *  weeks – the weeks to add, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the weeks added*/
-void zonedDateTimePlusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks);
+ZonedDateTime *zonedDateTimePlusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks);
 
 /* Updates provided ZonedDateTime with the specified number of days added.
  * This operates on the local time-line, adding days to the local date-time.
@@ -118,7 +119,7 @@ void zonedDateTimePlusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks);
  * Params:
  *  days – the days to add, may be negative
  * Returns: Returns: a ZonedDateTime struct based on this date-time with the days added*/
-void zonedDateTimePlusDays(ZonedDateTime *zonedDateTime, int64_t days);
+ZonedDateTime *zonedDateTimePlusDays(ZonedDateTime *zonedDateTime, int64_t days);
 
 /* Updates provided ZonedDateTime with the specified number of hours added.
  * This operates on the instant time-line, such that adding one hour will always be a duration of one hour later.
@@ -133,7 +134,7 @@ void zonedDateTimePlusDays(ZonedDateTime *zonedDateTime, int64_t days);
  * Params:
  *  hours – the hours to add, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the hours added*/
-void zonedDateTimePlusHours(ZonedDateTime *zonedDateTime, int64_t hours);
+ZonedDateTime *zonedDateTimePlusHours(ZonedDateTime *zonedDateTime, int64_t hours);
 
 /* Updates provided ZonedDateTime with the specified number of minutes added.
  * This operates on the instant time-line, such that adding one minute will always be a duration of one minute later.
@@ -141,7 +142,7 @@ void zonedDateTimePlusHours(ZonedDateTime *zonedDateTime, int64_t hours);
  * Params:
  *  minutes – the minutes to add, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the minutes added*/
-void zonedDateTimePlusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes);
+ZonedDateTime *zonedDateTimePlusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes);
 
 /* Updates provided ZonedDateTime with the specified number of seconds added.
  * This operates on the instant time-line, such that adding one second will always be a duration of one second later.
@@ -149,7 +150,7 @@ void zonedDateTimePlusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes);
  * Params:
  *  seconds – the seconds to add, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the seconds added*/
-void zonedDateTimePlusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds);
+ZonedDateTime *zonedDateTimePlusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds);
 
 /* Updates provided ZonedDateTime with the specified number of milliseconds added.
  * This operates on the instant time-line, such that adding one milliseconds will always be a duration of one millisecond later.
@@ -157,7 +158,7 @@ void zonedDateTimePlusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds);
  * Params:
  *  millis - the milliseconds to add, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the milliseconds added*/
-void zonedDateTimePlusMillis(ZonedDateTime *zonedDateTime, int64_t millis);
+ZonedDateTime *zonedDateTimePlusMillis(ZonedDateTime *zonedDateTime, int64_t millis);
 
 /* Updates provided ZonedDateTime with the specified number of years subtracted.
  * This operates on the local time-line, subtracting years to the local date-time.
@@ -167,7 +168,7 @@ void zonedDateTimePlusMillis(ZonedDateTime *zonedDateTime, int64_t millis);
  * Params:
  *  years – the years to subtract, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the years subtracted*/
-void zonedDateTimeMinusYears(ZonedDateTime *zonedDateTime, int64_t years);
+ZonedDateTime *zonedDateTimeMinusYears(ZonedDateTime *zonedDateTime, int64_t years);
 
 /* Updates provided ZonedDateTime with the specified number of months subtracted.
  * This operates on the local time-line, subtracting months to the local date-time.
@@ -176,7 +177,7 @@ void zonedDateTimeMinusYears(ZonedDateTime *zonedDateTime, int64_t years);
  * Params:
  *  months – the months to subtract, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the months subtracted*/
-void zonedDateTimeMinusMonths(ZonedDateTime *zonedDateTime, int64_t months);
+ZonedDateTime *zonedDateTimeMinusMonths(ZonedDateTime *zonedDateTime, int64_t months);
 
 /* Updates provided ZonedDateTime with the specified number of weeks subtracted.
  * This operates on the local time-line, subtracting weeks to the local date-time.
@@ -185,7 +186,7 @@ void zonedDateTimeMinusMonths(ZonedDateTime *zonedDateTime, int64_t months);
  * Params:
  *  weeks – the weeks to subtract, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the weeks subtracted*/
-void zonedDateTimeMinusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks);
+ZonedDateTime *zonedDateTimeMinusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks);
 
 /* Updates provided ZonedDateTime with the specified number of days subtracted.
  * This operates on the local time-line, subtracting days to the local date-time. This is then converted back to a ZonedDateTime, using the zone to obtain the offset.
@@ -193,7 +194,7 @@ void zonedDateTimeMinusWeeks(ZonedDateTime *zonedDateTime, int64_t weeks);
  * Params:
  *  days – the days to subtract, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the days subtracted*/
-void zonedDateTimeMinusDays(ZonedDateTime *zonedDateTime, int64_t days);
+ZonedDateTime *zonedDateTimeMinusDays(ZonedDateTime *zonedDateTime, int64_t days);
 
 /* Updates provided ZonedDateTime with the specified number of hours added.
  * This operates on the instant time-line, such that adding one hour will always be a duration of one hour later.
@@ -206,7 +207,7 @@ void zonedDateTimeMinusDays(ZonedDateTime *zonedDateTime, int64_t days);
  * Params:
  *  hours – the hours to add, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the hours added*/
-void zonedDateTimeMinusHours(ZonedDateTime *zonedDateTime, int64_t hours);
+ZonedDateTime *zonedDateTimeMinusHours(ZonedDateTime *zonedDateTime, int64_t hours);
 
 /* Updates provided ZonedDateTime with the specified number of minutes subtracted.
  * This operates on the instant time-line, such that subtracting one minute will always be a duration of one minute earlier.
@@ -214,7 +215,7 @@ void zonedDateTimeMinusHours(ZonedDateTime *zonedDateTime, int64_t hours);
  * Params:
  *  minutes – the minutes to subtract, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the minutes subtracted*/
-void zonedDateTimeMinusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes);
+ZonedDateTime *zonedDateTimeMinusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes);
 
 /* Updates provided ZonedDateTime with the specified number of seconds subtracted.
  * This operates on the instant time-line, such that subtracting one second will always be a duration of one second earlier.
@@ -222,7 +223,7 @@ void zonedDateTimeMinusMinutes(ZonedDateTime *zonedDateTime, int64_t minutes);
  * Params:
  *  seconds – the seconds to subtract, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the seconds subtracted*/
-void zonedDateTimeMinusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds);
+ZonedDateTime *zonedDateTimeMinusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds);
 
 /* Updates provided ZonedDateTime with the specified number of milliseconds subtracted.
  * This operates on the instant time-line, such that subtracting one millisecond will always be a duration of one millisecond earlier.
@@ -230,7 +231,7 @@ void zonedDateTimeMinusSeconds(ZonedDateTime *zonedDateTime, int64_t seconds);
  * Params:
  *  millis - the milliseconds to subtract, may be negative
  * Returns: a ZonedDateTime struct based on this date-time with the milliseconds subtracted*/
-void zonedDateTimeMinusMillis(ZonedDateTime *zonedDateTime, int64_t millis);
+ZonedDateTime *zonedDateTimeMinusMillis(ZonedDateTime *zonedDateTime, int64_t millis);
 
 /* Checks if provided date-time is equal to another date-time.
  * The comparison is based on the offset date-time and the zone.

@@ -563,6 +563,34 @@ static MunitResult testDateCompare(const MunitParameter params[], void *data) {
     return MUNIT_OK;
 }
 
+static MunitResult testDateBetween(const MunitParameter params[], void *data) {
+    Date expected = dateOf(2023, DECEMBER, 7);
+    Date *before = dateMinusDays(&DATE_COPY(expected), 5);
+    Date *after = datePlusDays(&DATE_COPY(expected), 5);
+
+    Date *test = datePlusDays(&DATE_COPY(expected), 3);
+    assert_true(isDateBetween(test, before, after));
+
+    test = datePlusDays(&DATE_COPY(expected), 3);
+    assert_true(isDateBetween(test, before, after));
+
+    test = dateMinusDays(&DATE_COPY(expected), 3);
+    assert_true(isDateBetween(test, before, after));
+
+    test = datePlusDays(&DATE_COPY(expected), 5);   // exclusive
+    assert_false(isDateBetween(test, before, after));
+
+    test = datePlusDays(&DATE_COPY(expected), 5);   // exclusive
+    assert_false(isDateBetween(test, before, after));
+
+    test = datePlusDays(&DATE_COPY(expected), 6);
+    assert_false(isDateBetween(test, before, after));
+
+    test = datePlusDays(&DATE_COPY(expected), 6);
+    assert_false(isDateBetween(test, before, after));
+    return MUNIT_OK;
+}
+
 static MunitResult testGetDayOfYear(const MunitParameter params[], void *data) {
     Date sampleDates[] = {
             {.year = 2008, .month = 7, .day = 5},
@@ -765,6 +793,8 @@ static MunitTest dateTests[] = {
         {.name =  "Test isLeapYear() - should correctly check for leap year", .test = testDateIsLeapYear},
 
         {.name =  "Test dateCompare() - should correctly compare two date instances", .test = testDateCompare},
+        {.name =  "Test isDateBetween() - should correctly check that one date between other two", .test = testDateBetween},
+
         {.name =  "Test getDayOfYear() - should correctly calculate day of year", .test = testGetDayOfYear},
         {.name =  "Test getDayOfWeek() - should correctly calculate day of week", .test = testGetDayOfWeek},
         {.name =  "Test getWeekOfYear() - should correctly calculate week of year", .test = testWeekOfYear},

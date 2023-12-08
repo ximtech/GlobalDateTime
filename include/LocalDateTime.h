@@ -2,6 +2,8 @@
 
 #include "LocalDate.h"
 
+#define DATE_TIME_COPY(dt) ((DateTime){.date = (dt).date, .time = (dt).time})
+
 typedef struct DateTime {
     Date date;
     Time time;
@@ -87,7 +89,7 @@ DateTime dateTimeAtStartOfDay(Date *date);
  * Instead of returning an invalid result, the last valid day of the month, 2009-02-28, is selected instead.
  * Params:
  *  years – the years to add, may be negative*/
-void dateTimePlusYears(DateTime *dateTime, int64_t years);
+DateTime *dateTimePlusYears(DateTime *dateTime, int64_t years);
 
 /* Updates provided DateTime with the specified number of months added.
  * This method adds the specified amount to the months field in three steps:
@@ -98,7 +100,7 @@ void dateTimePlusYears(DateTime *dateTime, int64_t years);
  * Instead of returning an invalid result, the last valid day of the month, 2007-04-30, is selected instead.
  * Params:
  *  months – the months to add, may be negative*/
-void dateTimePlusMonths(DateTime *dateTime, int64_t months);
+DateTime *dateTimePlusMonths(DateTime *dateTime, int64_t months);
 
 /* Updates provided DateTime with the specified number of weeks added.
  * This method adds the specified amount in weeks to the days field incrementing the month and year fields as necessary to ensure the result remains valid.
@@ -107,7 +109,7 @@ void dateTimePlusMonths(DateTime *dateTime, int64_t months);
  * Params:
  *  weeks – the weeks to add, may be negative
  * Returns: a DateTime based on this date-time with the weeks added*/
-void dateTimePlusWeeks(DateTime *dateTime, int64_t weeks);
+DateTime *dateTimePlusWeeks(DateTime *dateTime, int64_t weeks);
 
 /* Updates provided DateTime with the specified number of days added.
  * This method adds the specified amount to the days field incrementing the month and year fields as necessary to ensure the result remains valid.
@@ -116,31 +118,31 @@ void dateTimePlusWeeks(DateTime *dateTime, int64_t weeks);
  * Params:
  *  days – the days to add, may be negative
  * Returns: a DateTime based on this date-time with the days added*/
-void dateTimePlusDays(DateTime *dateTime, int64_t days);
+DateTime *dateTimePlusDays(DateTime *dateTime, int64_t days);
 
 /* Updates provided DateTime with the specified number of hours added.
  * Params:
  *  hours – the hours to add, may be negative
  * Returns: a DateTime based on this date-time with the hours added*/
-void dateTimePlusHours(DateTime *dateTime, int64_t hours);
+DateTime *dateTimePlusHours(DateTime *dateTime, int64_t hours);
 
 /* Updates provided DateTime with the specified number of minutes added.
  * Params:
  *  minutes – the minutes to add, may be negative
  * Returns: a DateTime based on this date-time with the minutes added*/
-void dateTimePlusMinutes(DateTime *dateTime, int64_t minutes);
+DateTime *dateTimePlusMinutes(DateTime *dateTime, int64_t minutes);
 
 /* Updates provided DateTime with the specified number of seconds added.
  * Params:
  *  seconds – the seconds to add, may be negative
  * Returns: a DateTime based on this date-time with the seconds added*/
-void dateTimePlusSeconds(DateTime *dateTime, int64_t seconds);
+DateTime *dateTimePlusSeconds(DateTime *dateTime, int64_t seconds);
 
 /* Updates provided DateTime with the specified number of milliseconds added.
  * Params:
  *  millis – the milliseconds to add, may be negative
  * Returns: a DateTime based on this date-time with the milliseconds added*/
-void dateTimePlusMillis(DateTime *dateTime, int64_t millis);
+DateTime *dateTimePlusMillis(DateTime *dateTime, int64_t millis);
 
 /* Updates provided DateTime with the specified number of years subtracted.
  * This method subtracts the specified amount from the years field in three steps:
@@ -152,7 +154,7 @@ void dateTimePlusMillis(DateTime *dateTime, int64_t millis);
  * Params:
  *  years – the years to subtract, may be negative
  * Returns: a DateTime based on this date-time with the years subtracted*/
-void dateTimeMinusYears(DateTime *dateTime, int64_t years);
+DateTime *dateTimeMinusYears(DateTime *dateTime, int64_t years);
 
 /* Updates provided DateTime with the specified number of months subtracted.
  * This method subtracts the specified amount from the months field in three steps:
@@ -164,7 +166,7 @@ void dateTimeMinusYears(DateTime *dateTime, int64_t years);
  * Params:
  *  months – the months to subtract, may be negative
  * Returns: a DateTime based on this date-time with the months subtracted*/
-void dateTimeMinusMonths(DateTime *dateTime, int64_t months);
+DateTime *dateTimeMinusMonths(DateTime *dateTime, int64_t months);
 
 /* Updates provided DateTime with the specified number of weeks subtracted.
  * This method subtracts the specified amount in weeks from the days field decrementing the month and year fields as necessary to ensure the result remains valid.
@@ -173,7 +175,7 @@ void dateTimeMinusMonths(DateTime *dateTime, int64_t months);
  * Params:
  *  weeks – the weeks to subtract, may be negative
  * Returns: a DateTime based on this date-time with the weeks subtracted*/
-void dateTimeMinusWeeks(DateTime *dateTime, int64_t weeks);
+DateTime *dateTimeMinusWeeks(DateTime *dateTime, int64_t weeks);
 
 /* Updates provided DateTime with the specified number of days subtracted.
  * This method subtracts the specified amount from the days field decrementing the month and year fields as necessary to ensure the result remains valid.
@@ -182,32 +184,32 @@ void dateTimeMinusWeeks(DateTime *dateTime, int64_t weeks);
  * Params:
  *  days – the days to subtract, may be negative
  * Returns: a DateTime based on this date-time with the days subtracted*/
-void dateTimeMinusDays(DateTime *dateTime, int64_t days);
+DateTime *dateTimeMinusDays(DateTime *dateTime, int64_t days);
 
 /* Updates provided DateTime with the specified number of hours subtracted.
  * Params:
  *  hours – the hours to subtract, may be negative
  * Returns: a DateTime based on this date-time with the hours subtracted*/
-void dateTimeMinusHours(DateTime *dateTime, int64_t hours);
+DateTime *dateTimeMinusHours(DateTime *dateTime, int64_t hours);
 
 /* Updates provided DateTime with the specified number of minutes subtracted.
  * Params:
  *  minutes – the minutes to subtract, may be negative
  * Returns: a DateTime based on this date-time with the minutes subtracted*/
-void dateTimeMinusMinutes(DateTime *dateTime, int64_t minutes);
+DateTime *dateTimeMinusMinutes(DateTime *dateTime, int64_t minutes);
 
 /* Updates provided DateTime with the specified number of seconds subtracted.
  * Params:
  *  seconds – the seconds to subtract, may be negative
  * Returns: a DateTime based on this date-time with the seconds subtracted*/
-void dateTimeMinusSeconds(DateTime *dateTime, int64_t seconds);
+DateTime *dateTimeMinusSeconds(DateTime *dateTime, int64_t seconds);
 
 /* Updates provided DateTime with the specified number of milliseconds subtracted.
  * Params:
  *  millis – the millis to subtract, may be negative
  * Returns:
  * a DateTime based on this date-time with the milliseconds subtracted*/
-void dateTimeMinusMillis(DateTime *dateTime, int64_t millis);
+DateTime *dateTimeMinusMillis(DateTime *dateTime, int64_t millis);
 
 /* Converts this DateTime to the number of seconds from the epoch of 1970-01-01T00:00:00Z.
  * This combines this local date-time and the specified offset to calculate the epoch-second value, which is the number of elapsed seconds from 1970-01-01T00:00:00Z.
@@ -253,6 +255,20 @@ bool isDateTimeAfter(DateTime *dateTime, DateTime *other);
  *  other – the other date-time to compare to
  * Returns: true if provided date-time is before the specified date-time*/
 bool isDateTimeBefore(DateTime *dateTime, DateTime *other);
+
+/* Checks if provided date-time is between the specified start and end date-time.
+ * This checks to see if provided date-time represents a point on the local time-line before the other date-time.
+ *          DateTime a = dateTimeOf(2012, 6, 1, 12, 12);
+ *          DateTime b = dateTimeOf(2012, 6, 1, 12, 0);
+ *          DateTime c = dateTimeOf(2012, 6, 1, 12, 20);
+ *          isDateTimeBetween(&a, &b, &c) == true
+ * This method only considers the position of the two date-times on the local time-line.
+ * Params:
+ *  dateTime – provided date and time value
+ *  startDateInclusive – the start date, exclusive
+ *  endDateExclusive – the end date, exclusive
+ * Returns: true if the date between this date and the end date*/
+bool isDateTimeBetween(DateTime *dateTime, DateTime *startExclusive, DateTime *endExclusive);
 
 /* Checks if provided date-time is equal to another date-time.
  * Params:

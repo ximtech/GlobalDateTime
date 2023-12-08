@@ -540,6 +540,34 @@ static MunitResult testInstantCompare(const MunitParameter params[], void *data)
     return MUNIT_OK;
 }
 
+static MunitResult testInstantBetween(const MunitParameter params[], void *data) {
+    Instant expected = instantOfEpochSeconds(123456789);
+    Instant *before = instantMinusSeconds(&INSTANT_COPY(expected), 5);
+    Instant *after = instantPlusSeconds(&INSTANT_COPY(expected), 5);
+
+    Instant *test = instantPlusSeconds(&INSTANT_COPY(expected), 3);
+    assert_true(isInstantBetween(test, before, after));
+
+    test = instantPlusSeconds(&INSTANT_COPY(expected), 3);
+    assert_true(isInstantBetween(test, before, after));
+
+    test = instantMinusSeconds(&INSTANT_COPY(expected), 3);
+    assert_true(isInstantBetween(test, before, after));
+
+    test = instantPlusSeconds(&INSTANT_COPY(expected), 5);   // exclusive
+    assert_false(isInstantBetween(test, before, after));
+
+    test = instantPlusSeconds(&INSTANT_COPY(expected), 5);   // exclusive
+    assert_false(isInstantBetween(test, before, after));
+
+    test = instantPlusSeconds(&INSTANT_COPY(expected), 6);
+    assert_false(isInstantBetween(test, before, after));
+
+    test = instantPlusSeconds(&INSTANT_COPY(expected), 6);
+    assert_false(isInstantBetween(test, before, after));
+    return MUNIT_OK;
+}
+
 static MunitTest instantTests[] = {
         {.name =  "Test instantOfEpochSeconds() - should correctly create instant struct", .test = testInstantOfEpochSeconds},
         {.name =  "Test instantOfEpochSecondsAdjust() - should correctly create instant struct with adjust", .test = testInstantOfEpochSecondsAdjust},
@@ -555,6 +583,7 @@ static MunitTest instantTests[] = {
 
         {.name =  "Test instantToEpochMillis() - should correctly convert instant to epoch millis", .test = testInstantToEpochMillis},
         {.name =  "Test instantCompare() - should correctly compare two instants", .test = testInstantCompare},
+        {.name =  "Test isInstantBetween() - should correctly compare that instant is between two others", .test = testInstantBetween},
         END_OF_TESTS
 };
 

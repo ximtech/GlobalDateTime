@@ -8,6 +8,7 @@
 #define INSTANT_MIN_SECONDS (-31557014167219200L)
 #define INSTANT_MAX_SECONDS (31556889864403199L)
 
+#define INSTANT_COPY(instant) ((Instant){.seconds = (instant).seconds, .micros = (instant).micros})
 
 typedef struct Instant {
     int64_t seconds;       // The number of seconds from the epoch of 1970-01-01T00:00:00Z.
@@ -52,32 +53,32 @@ Instant instantOfEpochMillis(int64_t epochMilli);
 /* This adds specified seconds to instant.
  * Params:
  *  secondsToAdd – the seconds to add, positive or negative*/
-void instantPlusSeconds(Instant *instant, int64_t secondsToAdd);
+Instant *instantPlusSeconds(Instant *instant, int64_t secondsToAdd);
 
 /* This adds specified milliseconds to Instant pointer.
  * Params:
  *  millisToAdd – the milliseconds to add, positive or negative*/
-void instantPlusMillis(Instant *instant, int64_t millisToAdd);
+Instant *instantPlusMillis(Instant *instant, int64_t millisToAdd);
 
 /* This adds specified microseconds to Instant pointer.
  * Params:
  *  microsToAdd – the microseconds to add, positive or negative*/
-void instantPlusMicros(Instant *instant, int64_t microsToAdd);
+Instant *instantPlusMicros(Instant *instant, int64_t microsToAdd);
 
 /* This subtracts specified seconds from Instant pointer.
  * Params:
  *  secondsToSubtract – the seconds to subtract, positive or negative*/
-void instantMinusSeconds(Instant *instant, int64_t secondsToSubtract);
+Instant *instantMinusSeconds(Instant *instant, int64_t secondsToSubtract);
 
 /* This subtracts specified milliseconds from Instant pointer.
  * Params:
  *  millisToSubtract – the milliseconds to subtract, positive or negative*/
-void instantMinusMillis(Instant *instant, int64_t millisToSubtract);
+Instant *instantMinusMillis(Instant *instant, int64_t millisToSubtract);
 
 /* This subtracts specified microseconds from Instant pointer.
  * Params:
  *  microsToSubtract – the microseconds to subtract, positive or negative*/
-void instantMinusMicros(Instant *instant, int64_t microsToSubtract);
+Instant *instantMinusMicros(Instant *instant, int64_t microsToSubtract);
 
 /* Converts instant pointer to the number of milliseconds from the epoch of 1970-01-01T00:00:00Z.
  * If this instant has greater than millisecond precision,
@@ -109,6 +110,15 @@ bool isInstantAfter(Instant *instant, Instant *other);
  *  other – the other instant to compare to
  * Returns: true if first instant is before the other instant*/
 bool isInstantBefore(Instant *instant, Instant *other);
+
+/* Checks if instant is between the other two instants.
+ * The comparison is based on the time-line position of the instants.
+ * Params:
+ *  instant – instant value to check
+ *  startExclusive – the instant from, exclusive
+ *  endExclusive – the up to instant, exclusive
+ * Returns: true if first instant is between the specified two instants*/
+bool isInstantBetween(Instant *instant, Instant *startExclusive, Instant *endExclusive);
 
 /* Checks if first instant is equal to the other instant.
  * The comparison is based on the time-line position of the instants.
